@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Capital Urbano">
+  <rect width="1200" height="630" fill="#000000"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#FF9933"/>
+  <polygon points="1100,0 1200,0 1200,100" fill="#FF9933" opacity="0.15"/>
+  <polygon points="0,530 0,630 120 630" fill="#FF9933" opacity="0.12"/>
+  <text x="600" y="260" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="72" font-weight="700" fill="#FFFFFF">Capital </text>
+  <text x="600" y="340" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="72" font-weight="700" fill="#FF9933">Urbano</text>
+  <text x="600" y="420" text-anchor="middle" font-family="Josefin Sans, Arial, sans-serif" font-size="32" fill="#CCCCCC">Desarrollamos permanencia urbana</text>
+  <text x="600" y="470" text-anchor="middle" font-family="Josefin Sans, Arial, sans-serif" font-size="24" fill="#888888">Vivienda vertical intraurbana · Guadalajara</text>
+</svg>

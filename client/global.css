@@ -1,0 +1,559 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Josefin+Sans:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Capital Urbano Theme
+   * Premium luxury real estate design system
+  */
+  :root {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 0%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 30 85% 61%;
+    --secondary-foreground: 0 0% 0%;
+
+    --muted: 0 0% 60%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 30 85% 61%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 95%;
+    --ring: 30 85% 61%;
+
+    --radius: 0px;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 85% 61%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 30 85% 61%;
+
+    --chamfer: 18px;
+    --chamfer-sm: 14px;
+    --panel-scoop: 36px;
+  }
+
+  .dark {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 30 85% 61%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 40%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 30 85% 61%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 15%;
+    --ring: 30 85% 61%;
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 100%;
+    --sidebar-primary: 0 0% 100%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 30 85% 61%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 0 0% 20%;
+    --sidebar-ring: 30 85% 61%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-josefin font-normal;
+    position: relative;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100dvh;
+  }
+
+  #root {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    min-height: 100dvh;
+  }
+
+  img,
+  video,
+  canvas,
+  iframe {
+    max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-montserrat font-bold tracking-tight;
+  }
+
+  p,
+  li {
+    @apply font-josefin;
+  }
+
+  :where(p, span, li, a, button, label, td, th) {
+    overflow-wrap: break-word;
+  }
+
+  pre,
+  code {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
+
+/* Luxury architectural grain texture */
+@layer utilities {
+  .grain {
+    position: relative;
+  }
+
+  .grain::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='1'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .grain-dark::after {
+    opacity: 0.06;
+  }
+
+  /* Keep Leaflet layers inside the map box (avoid overlapping FAQ / footer) */
+  /* Hero copy legibility over visible background video */
+
+  /* Chamfered brand shapes (PDF presentation) */
+  .cu-chamfer-border-tr {
+    --ch: var(--chamfer);
+    padding: 1px;
+    background: #ff9933;
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--ch)) 0,
+      100% var(--ch),
+      100% 100%,
+      0 100%
+    );
+  }
+
+  .cu-chamfer-fill-tr {
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--ch)) 0,
+      100% var(--ch),
+      100% 100%,
+      0 100%
+    );
+    width: 100%;
+    min-height: 100%;
+  }
+
+  .cu-chamfer-border-tl {
+    --ch: var(--chamfer-sm);
+    padding: 1px;
+    background: #ff9933;
+    clip-path: polygon(
+      var(--ch) 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 var(--ch)
+    );
+  }
+
+  .cu-chamfer-fill-tl {
+    clip-path: polygon(
+      var(--ch) 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      0 var(--ch)
+    );
+    width: 100%;
+    min-height: 100%;
+  }
+
+  /* DNA pillar cards */
+  .cu-dna-card {
+    --cu-dna-icon: 4.5rem;
+    --cu-dna-icon-overhang: calc(var(--cu-dna-icon) / 2);
+    padding-top: var(--cu-dna-icon-overhang);
+    padding-bottom: 0.375rem;
+  }
+
+  @media (min-width: 640px) {
+    .cu-dna-card {
+      --cu-dna-icon: 5rem;
+    }
+  }
+
+  .cu-dna-card__icon {
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    top: var(--cu-dna-icon-overhang);
+    width: var(--cu-dna-icon);
+    height: var(--cu-dna-icon);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .cu-dna-card__shell {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    min-height: 13.5rem;
+    height: 100%;
+  }
+
+  .cu-dna-card__body {
+    padding: calc(var(--cu-dna-icon-overhang) + 1rem) 1.5rem 2.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .cu-dna-card__body {
+      padding-inline: 1.75rem;
+      padding-bottom: 2.5rem;
+    }
+  }
+
+  .cu-dna-card__accent {
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    bottom: 0.375rem;
+    width: 2.5rem;
+    height: 0.375rem;
+    transform: translate(-50%, 50%);
+    background: #ff9933;
+    pointer-events: none;
+  }
+
+  /* Shared chamfer card accent (DNA, feature, team, stats) */
+  .cu-chamfer-accent {
+    position: absolute;
+    z-index: 20;
+    left: 50%;
+    bottom: 0;
+    width: 2.5rem;
+    height: 0.375rem;
+    transform: translate(-50%, 50%);
+    background: #ff9933;
+    pointer-events: none;
+  }
+
+  .cu-chamfer-card {
+    position: relative;
+  }
+
+  /** Grid rows — stretch children to equal height per row */
+  .cu-card-grid {
+    align-items: stretch;
+  }
+
+  .cu-card-grid > * {
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+  }
+
+  .cu-dna-grid {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 3.5rem 1.5rem;
+    align-items: stretch;
+  }
+
+  @media (min-width: 640px) {
+    .cu-dna-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cu-dna-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      row-gap: 3.5rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .cu-dna-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      row-gap: 2.5rem;
+    }
+  }
+
+  .cu-dna-grid > * {
+    height: 100%;
+    min-height: 0;
+    min-width: 0;
+  }
+
+  .cu-skeleton {
+    background: linear-gradient(
+      90deg,
+      #e8e8e8 0%,
+      #f4f4f4 45%,
+      #e8e8e8 90%
+    );
+    background-size: 200% 100%;
+    animation: cu-skeleton-shimmer 1.6s ease-in-out infinite;
+    border-radius: 2px;
+  }
+
+  .cu-skeleton--warm {
+    background: linear-gradient(
+      90deg,
+      #ddd9d2 0%,
+      #ece8e1 45%,
+      #ddd9d2 90%
+    );
+    background-size: 200% 100%;
+  }
+
+  .cu-skeleton--dark {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.06) 0%,
+      rgba(255, 255, 255, 0.14) 45%,
+      rgba(255, 255, 255, 0.06) 90%
+    );
+    background-size: 200% 100%;
+  }
+
+  @keyframes cu-skeleton-shimmer {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  .cu-chamfer-border-br {
+    --ch: var(--chamfer);
+    padding: 1px;
+    background: #ff9933;
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--ch)),
+      calc(100% - var(--ch)) 100%,
+      0 100%
+    );
+  }
+
+  .cu-chamfer-fill-br {
+    clip-path: polygon(
+      0 0,
+      100% 0,
+      100% calc(100% - var(--ch)),
+      calc(100% - var(--ch)) 100%,
+      0 100%
+    );
+  }
+
+  /* Strategy stack: scoop top-left + chamfer top-right (see #cu-strategy-clip) */
+  .cu-strategy-panel {
+    clip-path: url(#cu-strategy-clip);
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .cu-strategy-panel {
+      padding: 2rem 2.5rem 2rem 3rem;
+    }
+  }
+
+  .cu-strategy-panel--orange {
+    background: #ff9933;
+    color: #fff;
+  }
+
+  .cu-strategy-panel--black {
+    background: #000;
+    color: #fff;
+  }
+
+  .cu-strategy-panel--gray {
+    background: #e8e8e8;
+    color: #000;
+  }
+
+  .cu-media-chamfer-tr {
+    clip-path: polygon(
+      0 0,
+      calc(100% - var(--chamfer)) 0,
+      100% var(--chamfer),
+      100% 100%,
+      0 100%
+    );
+  }
+
+  .cu-hero-video-copy h1,
+  .cu-hero-video-copy p {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.35), 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .cu-hero-video-copy .font-montserrat.font-medium {
+    text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
+  }
+
+  .cu-urban-pattern {
+    background-image: url("/assets/pattern-urban.svg");
+    background-size: 48px 48px;
+  }
+
+  /** Home stats band — dark field with subtle grid + orange glow (no plaid tile) */
+  .cu-stats-band {
+    background-color: #0d0d0d;
+    background-image:
+      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(255, 153, 51, 0.18), transparent 55%),
+      radial-gradient(ellipse 45% 35% at 100% 0%, rgba(255, 153, 51, 0.1), transparent 50%),
+      radial-gradient(ellipse 35% 30% at 0% 50%, rgba(255, 153, 51, 0.06), transparent 45%),
+      linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+  }
+
+  .cu-btn-primary {
+    @apply bg-cu-orange text-white font-montserrat font-semibold transition-colors duration-300;
+  }
+
+  .cu-btn-primary:hover:not(:disabled) {
+    background-color: #ffad5c;
+  }
+
+  .cu-map-shell {
+    isolation: isolate;
+    z-index: 0;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  /* Public + admin page shells — prevent flex/grid overflow on small screens */
+  .cu-page {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .cu-container {
+    width: 100%;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .cu-container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .cu-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .cu-admin-page {
+    min-width: 0;
+    max-width: 100%;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .cu-cell-email {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    max-width: 11rem;
+  }
+
+  @media (min-width: 640px) {
+    .cu-cell-email {
+      max-width: none;
+    }
+  }
+
+  .prose-cu {
+    max-width: 100%;
+    overflow-wrap: break-word;
+  }
+
+  .prose-cu pre,
+  .prose-cu table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .cu-map-shell .leaflet-container,
+  .cu-map-shell .leaflet-pane,
+  .cu-map-shell .leaflet-top,
+  .cu-map-shell .leaflet-bottom,
+  .cu-map-shell .leaflet-control {
+    z-index: 1 !important;
+  }
+}

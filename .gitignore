@@ -1,0 +1,37 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment / secrets (never commit)
+.env
+.env.local
+.env.*.local
+.env.deploy
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+.config/
+deploy/
+public/api/_config.php
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Large brand videos (>100MB) — upload manually to server (see DEPLOY.md)
+public/assets/videos/CapitalUrbano.mp4
+public/assets/videos/SomosCapitalUrbano.mp4
