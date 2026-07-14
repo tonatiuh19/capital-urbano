@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
+import { Users } from "lucide-react";
 import { BrandFeatureCard } from "@/components/brand/BrandFeatureCard";
 import {
+  DEFAULT_EXPERIENCE_OWNERS_INTEGRATION,
   journeyStepIcon,
   parseExperienceJourneySteps,
   type ExperienceJourneyStep,
@@ -25,6 +27,9 @@ export function ExperienceJourneySection({ config }: Props) {
   const intro =
     (config?.experience_journey_intro as string) ||
     "Cuatro etapas pensadas para que cada decisión sea informada y tranquila.";
+  const ownersIntegration =
+    (config?.experience_owners_integration as string)?.trim() ||
+    DEFAULT_EXPERIENCE_OWNERS_INTEGRATION;
 
   return (
     <section className="mb-20" aria-labelledby="experience-journey-heading">
@@ -46,6 +51,21 @@ export function ExperienceJourneySection({ config }: Props) {
           <JourneyStepCard key={`${step.title}-${i}`} step={step} index={i} total={steps.length} />
         ))}
       </ol>
+
+      <motion.div
+        className="mt-10 max-w-3xl mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
+        <BrandFeatureCard
+          icon={Users}
+          title="Integración de propietarios"
+          description={ownersIntegration}
+          variant="light"
+        />
+      </motion.div>
     </section>
   );
 }

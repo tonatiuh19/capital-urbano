@@ -1,5 +1,5 @@
 import type { CmsPage, Development } from "@shared/api";
-import { BRAND_TAGLINE, BRAND_VOICE_LEAD } from "@/lib/brand/copy";
+import { BRAND_TAGLINE, BRAND_VALUE_PROPOSITION, BRAND_VOICE_LEAD } from "@/lib/brand/copy";
 
 /** Public routes with stable SEO defaults (CMS meta_description overrides when loaded). */
 export const PUBLIC_ROUTES = {
@@ -8,15 +8,15 @@ export const PUBLIC_ROUTES = {
     title: null as string | null,
     description: BRAND_VOICE_LEAD,
     keywords:
-      "Capital Urbano, desarrolladora inmobiliaria, permanencia urbana, bienes raíces Guadalajara, proyectos verticales, valor patrimonial",
+      "Capital Urbano, desarrolladora inmobiliaria, vivienda conectada a la ciudad, bienes raíces Guadalajara, proyectos verticales, valor patrimonial",
   },
   about: {
     path: "/about",
     title: "Nosotros",
     description:
-      "Historia y liderazgo de Capital Urbano: vivienda vertical intraurbana con método, control técnico y visión de largo plazo en Guadalajara.",
+      "Historia y liderazgo de Capital Urbano: vivienda vertical construida con metodología técnica, control de calidad y visión de largo plazo en Guadalajara.",
     keywords:
-      "Capital Urbano nosotros, desarrolladora Guadalajara, Gilberto Cordero, permanencia urbana",
+      "Capital Urbano nosotros, desarrolladora Guadalajara, Gilberto Cordero, vivienda conectada a la ciudad",
   },
   quality: {
     path: "/quality",
@@ -29,10 +29,9 @@ export const PUBLIC_ROUTES = {
   projects: {
     path: "/projects",
     title: "Proyectos",
-    description:
-      "Portafolio de vivienda vertical intraurbana de Capital Urbano en Guadalajara y zona metropolitana.",
+    description: BRAND_VALUE_PROPOSITION,
     keywords:
-      "proyectos inmobiliarios Guadalajara, desarrollos verticales, Capital Urbano, permanencia urbana",
+      "proyectos inmobiliarios Guadalajara, desarrollos verticales, Capital Urbano, vivienda conectada a la ciudad",
   },
   experience: {
     path: "/experience",

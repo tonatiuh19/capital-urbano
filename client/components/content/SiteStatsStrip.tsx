@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 const stats = [
   { key: "stat_years_experience", label: "Años experiencia", suffix: "+" },
   { key: "stat_sqm_built", label: "m² construidos", suffix: "+" },
-  { key: "stat_sqm_developed", label: "m² desarrollados", suffix: "+" },
   { key: "stat_families", label: "Familias", suffix: "+" },
 ] as const;
 
@@ -21,7 +20,7 @@ function StatsGrid({
   return (
     <div
       className={cn(
-        "grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 lg:gap-0",
+        "grid grid-cols-1 sm:grid-cols-3 gap-y-10 gap-x-6 lg:gap-0",
         dark ? "lg:divide-x lg:divide-white/15" : "",
       )}
     >

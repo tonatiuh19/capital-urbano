@@ -10,6 +10,7 @@ import { SkeletonDevelopmentGrid, SkeletonMap } from "@/components/loading";
 import { useShowQuerySkeleton } from "@/hooks/useShowQuerySkeleton";
 import { apiGet } from "@/lib/api";
 import type { Development } from "@shared/api";
+import { BRAND_VALUE_PROPOSITION } from "@/lib/brand/copy";
 
 export default function Projects() {
   const devQ = useQuery({
@@ -29,7 +30,7 @@ export default function Projects() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <PageHero
             title="Proyectos"
-            subtitle="Vivienda vertical intraurbana en Guadalajara, con método y control técnico."
+            subtitle={BRAND_VALUE_PROPOSITION}
           />
 
           {loading && (

@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
 import { Clapperboard, MapPin, PlayCircle } from "lucide-react";
 import { BrandVideoPreview } from "@/components/media/BrandVideoPreview";
+import { PORTFOLIO_VIDEO_SRC } from "@/lib/brand/copy";
 import { Link } from "react-router-dom";
-
-const VIDEO_SRC = "/assets/videos/CapitalUrbano.mp4";
 
 const fadeUp = {
   initial: { opacity: 0, y: 32 },
@@ -69,7 +68,7 @@ export function ProjectsVideoShowcase({ projectCount = 0 }: ProjectsVideoShowcas
 
         <div className="relative order-1 lg:order-2 min-h-[14rem] sm:min-h-[16rem] lg:min-h-0 bg-cu-warm-white">
           <BrandVideoPreview
-            src={VIDEO_SRC}
+            src={PORTFOLIO_VIDEO_SRC}
             title="Capital Urbano"
             caption="Nuestros desarrollos en la ciudad"
             variant="cinema"

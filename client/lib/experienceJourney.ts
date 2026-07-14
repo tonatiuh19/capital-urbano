@@ -30,13 +30,13 @@ export const DEFAULT_EXPERIENCE_JOURNEY: ExperienceJourneyStep[] = [
     icon: "file-check",
     title: "Reserva y documentación",
     description:
-      "Acompañamiento en contratos, planes de pago y actualizaciones periódicas del avance de obra.",
+      "Contrato supervisado por PROFECO y reportes mensuales de avance durante la construcción.",
   },
   {
     icon: "key-round",
     title: "Entrega",
     description:
-      "Recorrido de entrega, revisión de acabados y entrega de llaves con protocolos claros.",
+      "Recorrido de entrega de tu unidad con protocolos de revisión de la calidad de tus acabados y entrega de llaves.",
   },
   {
     icon: "headphones",
@@ -45,6 +45,9 @@ export const DEFAULT_EXPERIENCE_JOURNEY: ExperienceJourneyStep[] = [
       "Canal dedicado para garantías, dudas y soporte después de la escrituración.",
   },
 ];
+
+export const DEFAULT_EXPERIENCE_OWNERS_INTEGRATION =
+  "Integramos a los propietarios desde el día 1 del inicio de operación del edificio, en comisiones de inspección y vigilancia para que se vigile el correcto gasto de los recursos.";
 
 export function journeyStepIcon(name: string | null | undefined): LucideIcon {
   if (!name) return MessageCircle;

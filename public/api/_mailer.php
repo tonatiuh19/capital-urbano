@@ -4,12 +4,17 @@
  */
 defined('APP_INIT') or die('Direct access not allowed.');
 
+/**
+ * @param list<array{name:string,mime:string,data:string}> $attachments
+ * @param array{email:string,name?:string}|null $reply_to
+ */
 function smtp_send_mail(
     string $to_email,
     string $to_name,
     string $subject,
     string $html,
-    array  $attachments = []
+    array  $attachments = [],
+    ?array $reply_to = null
 ): bool {
     $host       = defined('SMTP_HOST') ? SMTP_HOST : 'localhost';
     $port       = defined('SMTP_PORT') ? (int)SMTP_PORT : 25;
@@ -84,6 +89,14 @@ function smtp_send_mail(
     $headers  = "Date: {$date}\r\n";
     $headers .= "From: {$fromEncoded} <{$fromAddr}>\r\n";
     $headers .= "To: {$toEncoded} <{$to_email}>\r\n";
+    if (
+        is_array($reply_to)
+        && !empty($reply_to['email'])
+        && filter_var($reply_to['email'], FILTER_VALIDATE_EMAIL)
+    ) {
+        $replyName = '=?UTF-8?B?' . base64_encode((string) ($reply_to['name'] ?? '')) . '?=';
+        $headers .= "Reply-To: {$replyName} <{$reply_to['email']}>\r\n";
+    }
     $headers .= "Subject: {$subEncoded}\r\n";
     $headers .= "Message-ID: {$msgId}\r\n";
     $headers .= "MIME-Version: 1.0\r\n";

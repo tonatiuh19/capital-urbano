@@ -25,11 +25,11 @@ export function SkeletonStatsPanel({
         >
           <div
             className={cn(
-              "grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 lg:gap-0",
+              "grid grid-cols-1 sm:grid-cols-3 gap-y-10 gap-x-6 lg:gap-0",
               dark && "lg:divide-x lg:divide-white/15",
             )}
           >
-            {Array.from({ length: 4 }).map((_, i) => (
+            {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="text-center px-2 sm:px-4 space-y-2">
                 <SkeletonLine
                   className="h-10 sm:h-12 mx-auto w-2/3"

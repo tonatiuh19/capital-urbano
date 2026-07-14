@@ -1,6 +1,8 @@
 import { ExternalLink, Layers, Building2, Sparkles } from "lucide-react";
+import { BrandVideoPreview } from "@/components/media/BrandVideoPreview";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { SkeletonChamferCard } from "@/components/loading";
+import { LIV_PROMO_VIDEO_SRC } from "@/lib/brand/copy";
 import {
   livAssetUrl,
   livSiteConfig,
@@ -80,6 +82,14 @@ export function LivCapitalPanel({ feed, loading, error, externalUrl }: Props) {
           Abrir LIV Capital <ExternalLink size={16} />
         </a>
       </div>
+
+      <BrandVideoPreview
+        src={LIV_PROMO_VIDEO_SRC}
+        title={cfg.site_title ?? "LIV Capital"}
+        caption="Video promocional del proyecto"
+        variant="cinema"
+        className="min-h-[14rem] sm:min-h-[18rem]"
+      />
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {cfg.total_floors != null && (

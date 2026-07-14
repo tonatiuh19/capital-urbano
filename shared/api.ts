@@ -46,6 +46,8 @@ export interface QualityPillar {
   display_order: number;
 }
 
+export type TeamSection = "leadership" | "technical" | "general";
+
 export interface TeamMember {
   id: number;
   name: string;
@@ -54,6 +56,7 @@ export interface TeamMember {
   bio?: string | null;
   photo_url?: string | null;
   linkedin_url?: string | null;
+  team_section?: TeamSection | null;
   is_leadership: number;
 }
 

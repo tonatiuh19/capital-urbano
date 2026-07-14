@@ -9,7 +9,7 @@ export const ABOUT_VALUES = [
   {
     key: "calidad",
     title: "Calidad verificable",
-    text: "Protocolos, inspecciones externas y proveedores certificados que respaldan cada entrega.",
+    text: "Inspecciones externas, proveedores confiables y documentación de cada etapa de la construcción.",
   },
   {
     key: "permanencia",
@@ -19,26 +19,35 @@ export const ABOUT_VALUES = [
 ] as const;
 
 export const ABOUT_MILESTONES = [
-  { year: "2000+", label: "Inicio de operaciones en desarrollo vertical en GDL" },
-  { year: "900K+", label: "Metros cuadrados construidos en la zona metropolitana" },
-  { year: "Hoy", label: "Portafolio activo con proyectos en Centro, Providencia y Country" },
+  { year: "2021", label: "Fundación de Capital Urbano y inicio de operaciones en desarrollo vertical" },
+  { year: "1M+", label: "Metros cuadrados construidos en la zona metropolitana" },
+  {
+    year: "Hoy",
+    label: "Portafolio activo en proyectos en centro histórico, Providencia y Country",
+  },
 ] as const;
 
 export const ABOUT_LEADERSHIP = {
   title: "Dirección",
   subtitle:
-    "Liderazgo con experiencia en desarrollo vertical y visión de largo plazo.",
+    "Gilberto Cordero Estrada — socio fundador y CEO. Ingeniero civil (UdG), maestría en valuación inmobiliaria (UNIVA) y 27 años en desarrollo vertical en Guadalajara.",
 } as const;
 
 export const ABOUT_WHY_BULLETS = [
-  "Desarrollo vertical en corredores consolidados de Guadalajara.",
-  "Control técnico en diseño, obra y entrega con protocolos verificables.",
-  "Alianzas con proveedores certificados y supervisión externa.",
-  "Proyectos pensados para conservar funcionalidad y valor patrimonial.",
+  "Metodología BIM y control de calidad con inspecciones externas independientes del contratista",
+  "Alianzas de largo plazo con proveedores y materiales certificados",
+  "Enfoque en las comunidades para entregar amenidades funcionales y adecuadas",
+  "Transparencia en plazos de ejecución, reportes y comunicación con compradores e inversionistas",
 ] as const;
 
 export const ABOUT_TEAM = {
   title: "Equipo multidisciplinario",
   subtitle:
-    "Comercial, obra, marketing y operación trabajando de forma integrada en cada desarrollo.",
+    "Comercial, marketing y operación trabajando de forma integrada en cada desarrollo.",
+} as const;
+
+export const ABOUT_TECHNICAL = {
+  title: "Staff técnico",
+  subtitle:
+    "Especialistas en obra, datos, ingenierías y control de calidad que respaldan cada desarrollo.",
 } as const;

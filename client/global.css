@@ -334,7 +334,7 @@
 
   @media (min-width: 1280px) {
     .cu-dna-grid {
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       row-gap: 2.5rem;
     }
   }

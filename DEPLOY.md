@@ -58,7 +58,8 @@ GitHub blocks files over 100MB, so these are **gitignored** and must exist on th
 | File | In git? | Used on |
 |------|---------|---------|
 | `capital-hero-section.mp4` | Yes (~5MB) | Home hero background |
-| `CapitalUrbano.mp4` | No (~118MB) | About, Projects showcase |
+| `liv-capital-promo.mp4` | Yes (~10MB) | LIV Capital cards, ficha LIV, preview en proyectos |
+| `CapitalUrbano.mp4` | No (~118MB) | About, Projects showcase (portafolio general) |
 | `SomosCapitalUrbano.mp4` | No (~186MB) | Home “Somos” section |
 
 After each deploy, verify the two large files are still on the server (FTP/cPanel). `deploy.sh --upload` with `--delete` will not remove them if they were never in `deploy/` — but if you replace the whole `assets/videos/` folder, re-upload the large MP4s.

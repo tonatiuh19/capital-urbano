@@ -18,6 +18,7 @@ import { ProjectLocationMap } from "@/components/projects/ProjectLocationMap";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { LivCapitalPanel } from "@/components/projects/LivCapitalPanel";
 import { useLivFeed } from "@/hooks/useLivFeed";
+import { getLivProjectSlug } from "@/lib/projects/livProject";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Development } from "@shared/api";
 import { ArrowLeft, MapPin, Mail, Phone, ExternalLink, FileDown } from "lucide-react";
@@ -39,9 +40,7 @@ export default function ProjectDetail() {
   const loading = useShowQuerySkeleton(devQ);
   const d = devQ.data?.development;
 
-  const livSlug =
-    d?.liv_project_slug ||
-    (d?.external_site_url?.includes("livcapitalgdl.mx") ? "liv-capital" : null);
+  const livSlug = d ? getLivProjectSlug(d) : null;
   const livQ = useLivFeed(livSlug);
   const hasLiv = !!livSlug;
 

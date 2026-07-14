@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import adminAxios from "@/store/axiosAdmin";
 import { getAdminApiError } from "@/lib/adminApi";
 import { AdminFormField, AdminFormSection, inputClass } from "@/components/admin/AdminFormField";
 import { getSettingMeta, groupSettings } from "@/lib/adminSettingLabels";
+import { PUBLIC_STAT_KEYS } from "@/lib/adminContentGaps";
 
 type Setting = { setting_key: string; setting_value: string; is_public: number };
 
@@ -46,6 +47,21 @@ export default function AdminSettings() {
 
   const gate = settings.find((s) => s.setting_key === "under_construction");
   const groups = groupSettings(settings);
+  const statKeySet = useMemo(() => new Set(PUBLIC_STAT_KEYS.map((s) => s.key)), []);
+
+  const statValidationErrors = useMemo(() => {
+    const errors: string[] = [];
+    for (const stat of PUBLIC_STAT_KEYS) {
+      const row = settings.find((s) => s.setting_key === stat.key);
+      const value = row?.setting_value?.trim() ?? "";
+      if (!value) {
+        errors.push(`Falta «${stat.label}» — en el sitio se mostrará como —.`);
+      } else if (!/^\d+$/.test(value)) {
+        errors.push(`«${stat.label}» debe ser solo números.`);
+      }
+    }
+    return errors;
+  }, [settings]);
 
   if (loading) {
     return <p className="text-cu-concrete">Cargando…</p>;
@@ -95,12 +111,25 @@ export default function AdminSettings() {
         </label>
       </div>
 
+      {statValidationErrors.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-sm px-4 py-3 text-sm text-amber-900">
+          <p className="font-semibold mb-1">Estadísticas incompletas</p>
+          <ul className="list-disc pl-5 space-y-1">
+            {statValidationErrors.map((err) => (
+              <li key={err}>{err}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <div className="bg-white border border-cu-stone/30 p-6 rounded-sm space-y-8 shadow-sm">
         {groups.map((group) => (
           <AdminFormSection key={group.title} title={group.title}>
             {group.items.map((s) => {
               const meta = getSettingMeta(s.setting_key);
               const id = `setting-${s.setting_key}`;
+              const isStat = statKeySet.has(s.setting_key as (typeof PUBLIC_STAT_KEYS)[number]["key"]);
+              const statEmpty = isStat && !s.setting_value?.trim();
               return (
                 <AdminFormField
                   key={s.setting_key}
@@ -122,11 +151,16 @@ export default function AdminSettings() {
                   ) : (
                     <input
                       id={id}
-                      className={inputClass}
+                      className={`${inputClass}${statEmpty ? " border-amber-400" : ""}`}
                       maxLength={meta.maxLength}
+                      inputMode={isStat ? "numeric" : undefined}
+                      pattern={isStat ? "[0-9]*" : undefined}
                       value={s.setting_value ?? ""}
                       onChange={(e) => updateSetting(s.setting_key, e.target.value)}
                     />
+                  )}
+                  {statEmpty && (
+                    <p className="text-xs text-amber-700 mt-1">Vacío — el sitio mostrará «—».</p>
                   )}
                 </AdminFormField>
               );

@@ -30,6 +30,9 @@ define('SMTP_USER',       'no-responder@capitalurbano.com');
 define('SMTP_PASS',       'your-smtp-password');
 define('SMTP_FROM_NAME',  'Capital Urbano');
 
+// Always notified on contact form (plus site_settings.contact_email when different)
+define('CONTACT_NOTIFY_EMAIL', 'contacto@capitalurbano.com');
+
 // ─── App ─────────────────────────────────────────────────────────────────────
 define('APP_ENV',     'production');          // development | production
 define('APP_URL',     'https://capitalurbanomx.com');

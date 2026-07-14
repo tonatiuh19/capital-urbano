@@ -56,11 +56,12 @@ Browser → http://localhost:8080
 | `public/api/_config.php` | DB, SMTP, CORS, bypass — **gitignored**, one file for local + manual server upload |
 | `public/api/_config.example.php` | Template |
 | `.env` | Optional Vite-only (`VITE_*`) |
+| `public/assets/videos/liv-capital-promo.mp4` | In git (~10MB) — LIV Capital promo; copy from `liv-capital/public/videos/recorrido.mp4` |
 | `public/assets/videos/CapitalUrbano.mp4` | **gitignored** (~118MB) — copy from team storage or production |
 | `public/assets/videos/SomosCapitalUrbano.mp4` | **gitignored** (~186MB) — same |
 | `public/assets/videos/capital-hero-section.mp4` | In git (~5MB) — home hero |
 
-For local video playback, place the two large MP4s in `public/assets/videos/` on your machine. They are not in the repo (see `DEPLOY.md`).
+For local playback of the two large portfolio MP4s, place them in `public/assets/videos/` on your machine. They are not in the repo (see `DEPLOY.md`). The LIV promo (`liv-capital-promo.mp4`) is included in git.
 
 **liv** uses remote Banahosting from `_config.php` (`DB_HOST=50.31.188.69`, `APP_ENV=development`, `CORS_ORIGIN=*`). **Capital Urbano** should use the same approach — not a second `_config.local.php` file.
 

@@ -15,8 +15,9 @@ export type Field = {
   placeholder?: string;
   required?: boolean;
   maxLength?: number;
-  type?: "text" | "textarea" | "number" | "checkbox" | "image";
+  type?: "text" | "textarea" | "number" | "checkbox" | "image" | "select";
   uploadFolder?: AdminUploadFolder;
+  options?: { value: string; label: string }[];
 };
 
 export type AdminCrudCardConfig = {
@@ -35,6 +36,8 @@ export function AdminSimpleCrud({
   idKey = "id",
   card,
   formDescription,
+  emptyStateMessage,
+  emptyStateCtaLabel = "Agregar primer registro",
 }: {
   title: string;
   apiPath: string;
@@ -43,6 +46,8 @@ export function AdminSimpleCrud({
   idKey?: string;
   card?: AdminCrudCardConfig;
   formDescription?: string;
+  emptyStateMessage?: string;
+  emptyStateCtaLabel?: string;
 }) {
   const [items, setItems] = useState<Record<string, unknown>[]>([]);
   const [form, setForm] = useState<Record<string, unknown>>({});
@@ -91,7 +96,15 @@ export function AdminSimpleCrud({
   const openCreate = () => {
     const empty: Record<string, unknown> = {};
     for (const f of fields) {
-      empty[f.key] = f.type === "checkbox" ? 1 : f.type === "number" ? 0 : "";
+      if (f.type === "checkbox") {
+        empty[f.key] = 1;
+      } else if (f.type === "number") {
+        empty[f.key] = 0;
+      } else if (f.type === "select") {
+        empty[f.key] = f.options?.[0]?.value ?? "";
+      } else {
+        empty[f.key] = "";
+      }
     }
     setForm(empty);
     setMessage(null);
@@ -104,6 +117,8 @@ export function AdminSimpleCrud({
       const v = item[f.key];
       if (f.type === "checkbox") {
         next[f.key] = v === 1 || v === true || v === "1" ? 1 : 0;
+      } else if (f.type === "select") {
+        next[f.key] = v ?? f.options?.[0]?.value ?? "";
       } else {
         next[f.key] = v ?? (f.type === "number" ? 0 : "");
       }
@@ -114,6 +129,19 @@ export function AdminSimpleCrud({
   };
 
   const save = async () => {
+    for (const f of fields) {
+      if (!f.required) continue;
+      const raw = form[f.key];
+      const empty =
+        f.type === "checkbox"
+          ? false
+          : raw === undefined || raw === null || String(raw).trim() === "";
+      if (empty) {
+        setMessage({ type: "err", text: `«${f.label}» es obligatorio.` });
+        return;
+      }
+    }
+
     setSaving(true);
     setMessage(null);
     const payload = buildPayload();
@@ -179,6 +207,31 @@ export function AdminSimpleCrud({
           />
           <span>{f.label}</span>
         </label>
+      );
+    }
+    if (f.type === "select") {
+      return (
+        <AdminFormField
+          key={f.key}
+          id={id}
+          label={f.label}
+          hint={f.hint}
+          required={f.required}
+          value={String(form[f.key] ?? "")}
+        >
+          <select
+            id={id}
+            value={String(form[f.key] ?? "")}
+            onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+            className={inputClass}
+          >
+            {(f.options ?? []).map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </AdminFormField>
       );
     }
 
@@ -295,7 +348,18 @@ export function AdminSimpleCrud({
           <p className="text-cu-concrete">Cargando…</p>
         )
       ) : items.length === 0 ? (
-        <p className="text-cu-concrete text-sm">Sin registros.</p>
+        <div className="border border-dashed border-cu-stone/30 rounded-sm p-8 text-center bg-cu-warm-white/50">
+          <p className="text-cu-concrete text-sm mb-4">
+            {emptyStateMessage ?? "Sin registros."}
+          </p>
+          <button
+            type="button"
+            onClick={openCreate}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-cu-orange text-white text-sm font-semibold rounded-sm"
+          >
+            <Plus size={16} /> {emptyStateCtaLabel}
+          </button>
+        </div>
       ) : card ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
           {items.map((item) => {
@@ -309,6 +373,15 @@ export function AdminSimpleCrud({
             }
             if (item.is_leadership === 1 || item.is_leadership === true) {
               badges.push({ label: "Liderazgo", className: "bg-cu-orange text-white" });
+            }
+            const section = String(item.team_section ?? "");
+            if (section === "technical") {
+              badges.push({ label: "Staff técnico", className: "bg-cu-black/75 text-white" });
+            } else if (section === "general") {
+              badges.push({ label: "Equipo", className: "bg-cu-stone/80 text-white" });
+            }
+            if (card.imageKey && !String(item[card.imageKey] ?? "").trim()) {
+              badges.push({ label: "Sin foto", className: "bg-amber-600/90 text-white" });
             }
             if (item.category && card.subtitleKey !== "category") {
               badges.push({

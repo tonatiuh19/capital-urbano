@@ -15,8 +15,10 @@ export function usePublicSiteConfig() {
 
 export function formatStat(value: string | number | boolean | undefined, suffix = ""): string {
   if (value === undefined || value === "") return "—";
-  const n = typeof value === "number" ? value : parseInt(String(value).replace(/\D/g, ""), 10);
-  if (Number.isNaN(n)) return String(value);
+  const raw = typeof value === "string" ? value.trim() : value;
+  if (raw === "") return "—";
+  const n = typeof raw === "number" ? raw : parseInt(String(raw).replace(/\D/g, ""), 10);
+  if (Number.isNaN(n)) return String(raw);
   if (n >= 1_000_000) return `${Math.round(n / 100_000) / 10}M${suffix}`;
   if (n >= 1_000) return `${Math.round(n / 100) / 10}K${suffix}`;
   return `${n}${suffix}`;

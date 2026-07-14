@@ -34,9 +34,11 @@ import {
   ABOUT_LEADERSHIP,
   ABOUT_MILESTONES,
   ABOUT_TEAM,
+  ABOUT_TECHNICAL,
   ABOUT_VALUES,
   ABOUT_WHY_BULLETS,
 } from "@/lib/copy/aboutPage";
+import { resolveTeamSection } from "@/lib/teamSection";
 
 const panelVariants = ["orange", "black", "gray"] as const;
 
@@ -69,13 +71,25 @@ export default function About() {
   const devLoading = useShowQuerySkeleton(devQ);
 
   const page = pageQ.data?.page;
-  const leadership = (teamQ.data?.members ?? []).filter((m) => m.is_leadership);
-  const team = (teamQ.data?.members ?? []).filter((m) => !m.is_leadership);
+  const allMembers = teamQ.data?.members ?? [];
+  const leadership = allMembers.filter((m) => resolveTeamSection(m) === "leadership");
+  const technicalStaff = allMembers.filter((m) => resolveTeamSection(m) === "technical");
+  const team = allMembers.filter((m) => resolveTeamSection(m) === "general");
   const projects = devQ.data?.developments ?? [];
   const heroSubtitle =
     (config?.about_hero_subtitle as string) ||
     page?.meta_description ||
     BRAND_TAGLINE;
+  const leadershipTitle =
+    (config?.about_leadership_title as string) || ABOUT_LEADERSHIP.title;
+  const leadershipSubtitle =
+    (config?.about_leadership_subtitle as string) || ABOUT_LEADERSHIP.subtitle;
+  const technicalTitle =
+    (config?.about_technical_title as string) || ABOUT_TECHNICAL.title;
+  const technicalSubtitle =
+    (config?.about_technical_subtitle as string) || ABOUT_TECHNICAL.subtitle;
+  const teamTitle = (config?.about_team_title as string) || ABOUT_TEAM.title;
+  const teamSubtitle = (config?.about_team_subtitle as string) || ABOUT_TEAM.subtitle;
 
   return (
     <div className="cu-page min-h-screen bg-white">
@@ -151,7 +165,7 @@ export default function About() {
               <PageSectionHeader
                 eyebrow="Trayectoria"
                 title="Cifras y hitos"
-                description="Más de dos décadas transformando el skyline de Guadalajara."
+                description="27 años de trayectoria en desarrollo vertical transformando el skyline de Guadalajara."
                 align="center"
                 className="mb-8"
               />
@@ -230,10 +244,10 @@ export default function About() {
             {!teamLoading && leadership.length > 0 && (
               <motion.div className="mb-20" {...fadeUp}>
                 <h2 className="text-3xl sm:text-4xl font-montserrat font-bold text-cu-black text-center mb-4">
-                  {ABOUT_LEADERSHIP.title}
+                  {leadershipTitle}
                 </h2>
                 <p className="text-center text-cu-concrete max-w-xl mx-auto mb-12">
-                  {ABOUT_LEADERSHIP.subtitle}
+                  {leadershipSubtitle}
                 </p>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 cu-card-grid">
                   {leadership.map((m) => (
@@ -248,13 +262,33 @@ export default function About() {
               </motion.div>
             )}
 
+            {!teamLoading && technicalStaff.length > 0 && (
+              <motion.div className="mb-20" {...fadeUp}>
+                <h2 className="text-2xl sm:text-3xl font-montserrat font-bold text-cu-black text-center mb-4">
+                  {technicalTitle}
+                </h2>
+                <p className="text-center text-cu-concrete max-w-lg mx-auto mb-10 text-sm">
+                  {technicalSubtitle}
+                </p>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 cu-card-grid">
+                  {technicalStaff.map((m) => (
+                    <TeamCard
+                      key={m.id}
+                      member={m}
+                      onSelect={() => setSelectedMember(m)}
+                    />
+                  ))}
+                </div>
+              </motion.div>
+            )}
+
             {!teamLoading && team.length > 0 && (
               <motion.div className="mb-12" {...fadeUp}>
                 <h2 className="text-2xl font-montserrat font-bold text-cu-black text-center mb-4">
-                  {ABOUT_TEAM.title}
+                  {teamTitle}
                 </h2>
                 <p className="text-center text-cu-concrete max-w-lg mx-auto mb-10 text-sm">
-                  {ABOUT_TEAM.subtitle}
+                  {teamSubtitle}
                 </p>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 cu-card-grid">
                   {team.map((m) => (

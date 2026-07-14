@@ -218,7 +218,9 @@ export default function Contact() {
                 {status === "loading" ? "Enviando…" : "Enviar mensaje"}
               </button>
               {status === "ok" && (
-                <p className="text-sm text-green-700">Mensaje enviado. Te contactaremos pronto.</p>
+                <p className="text-sm text-green-700">
+                  Mensaje enviado. Te enviamos una confirmación a tu correo y nuestro equipo te contactará pronto.
+                </p>
               )}
               {status === "error" && (
                 <p className="text-sm text-red-600">{errorMsg}</p>

@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
 import { HeroBackground } from "@/components/home/HeroBackground";
+import { DeveloperExperienceSection } from "@/components/home/DeveloperExperienceSection";
 import { DevelopmentCard } from "@/components/projects/DevelopmentCard";
 import { DevelopmentsMap } from "@/components/projects/DevelopmentsMap";
 import { apiGet } from "@/lib/api";
@@ -26,6 +27,7 @@ import {
   BRAND_VALUE_PROPOSITION,
   HOME_ABOUT_BULLETS,
   HOME_ABOUT_TEASER,
+  HOME_CTA_PROJECTS,
 } from "@/lib/brand/copy";
 import { CONTENT_CANON, canonLinkLabel } from "@/lib/brand/contentCanon";
 
@@ -63,7 +65,7 @@ export default function Index() {
   return (
     <div className="cu-page min-h-screen bg-white">
       <PageMeta route="home" titleMode="home" />
-      <Header immersiveUntilScroll />
+      <Header />
 
       {/* Hero Section */}
       <section className="relative min-h-screen min-h-[100dvh] pt-20 overflow-hidden">
@@ -146,7 +148,7 @@ export default function Index() {
                 to="/projects"
                 className="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 sm:px-10 py-4 bg-cu-orange text-white font-montserrat font-semibold text-sm uppercase tracking-wider rounded-sm hover:bg-cu-orange-80 transition-all duration-300 shadow-lg hover:shadow-xl sm:hover:translate-y-[-2px] group"
               >
-                Conocer proyectos
+                {HOME_CTA_PROJECTS}
                 <ArrowRight
                   size={18}
                   className="group-hover:translate-x-1 transition-transform"
@@ -215,6 +217,8 @@ export default function Index() {
         </div>
       </section>
 
+      <DeveloperExperienceSection />
+
       {/* ADN de marca */}
       <section id={CONTENT_CANON.dnaPillars.sectionId} className="py-16 sm:py-20 bg-cu-warm-white scroll-mt-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -268,8 +272,7 @@ export default function Index() {
               Proyectos Destacados
             </h2>
             <p className="text-lg text-cu-black-60 max-w-2xl mx-auto">
-              Vivienda vertical intraurbana en Guadalajara, planificada con
-              método y control técnico.
+              {BRAND_VALUE_PROPOSITION}
             </p>
           </motion.div>
 
@@ -465,7 +468,7 @@ export default function Index() {
               <BrandVideoPreview
                 src="/assets/videos/SomosCapitalUrbano.mp4"
                 title={BRAND_CONCEPT}
-                caption="25+ años de trayectoria"
+                caption="27 años de trayectoria"
               />
             </motion.div>
           </motion.div>

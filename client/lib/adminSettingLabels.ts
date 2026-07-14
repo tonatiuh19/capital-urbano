@@ -19,10 +19,36 @@ const SETTING_LABELS: Record<string, SettingMeta> = {
   },
   newsletter_heading: { label: "Título newsletter (footer)" },
   newsletter_subcopy: { label: "Texto newsletter (footer)", multiline: true },
-  stat_years_experience: { label: "Estadística: años de experiencia", hint: "Solo número." },
-  stat_sqm_built: { label: "Estadística: m² construidos", hint: "Solo número." },
-  stat_sqm_developed: { label: "Estadística: m² desarrollados", hint: "Solo número." },
-  stat_families: { label: "Estadística: familias", hint: "Solo número." },
+  stat_years_experience: {
+    label: "Estadística: años de experiencia",
+    hint: "Solo número entero. Ej: 27. Se muestra en inicio y nosotros.",
+  },
+  stat_sqm_built: {
+    label: "Estadística: m² construidos",
+    hint: "Solo número entero sin comas. Ej: 1000000 (se formatea con + en el sitio).",
+  },
+  stat_families: {
+    label: "Estadística: familias",
+    hint: "Solo número entero. Confirmar cifra con Edna. Se muestra en inicio y nosotros.",
+  },
+  about_leadership_title: { label: "Nosotros — título sección Dirección", maxLength: 80 },
+  about_leadership_subtitle: {
+    label: "Nosotros — subtítulo Dirección",
+    multiline: true,
+    maxLength: 320,
+  },
+  about_technical_title: { label: "Nosotros — título Staff técnico", maxLength: 80 },
+  about_technical_subtitle: {
+    label: "Nosotros — subtítulo Staff técnico",
+    multiline: true,
+    maxLength: 320,
+  },
+  about_team_title: { label: "Nosotros — título Equipo multidisciplinario", maxLength: 80 },
+  about_team_subtitle: {
+    label: "Nosotros — subtítulo Equipo multidisciplinario",
+    multiline: true,
+    maxLength: 320,
+  },
   about_hero_subtitle: { label: "Subtítulo hero — Nosotros", maxLength: 160 },
   quality_hero_subtitle: { label: "Subtítulo hero — Calidad", maxLength: 160 },
   experience_hero_subtitle: { label: "Subtítulo hero — Experiencia", maxLength: 160 },
@@ -31,6 +57,11 @@ const SETTING_LABELS: Record<string, SettingMeta> = {
   experience_journey_steps: {
     label: "Pasos del recorrido (JSON)",
     hint: 'Arreglo JSON con icon, title, description. No editar sin conocimiento técnico.',
+    multiline: true,
+  },
+  experience_owners_integration: {
+    label: "Integración de propietarios",
+    hint: "Texto bajo el recorrido en /experience.",
     multiline: true,
   },
   coming_soon_title: { label: "Título — página Próximamente" },
@@ -69,7 +100,18 @@ export const SETTING_GROUPS: { title: string; keys: string[] }[] = [
   },
   {
     title: "Estadísticas (inicio y nosotros)",
-    keys: ["stat_years_experience", "stat_sqm_built", "stat_sqm_developed", "stat_families"],
+    keys: ["stat_years_experience", "stat_sqm_built", "stat_families"],
+  },
+  {
+    title: "Nosotros — secciones de equipo",
+    keys: [
+      "about_leadership_title",
+      "about_leadership_subtitle",
+      "about_technical_title",
+      "about_technical_subtitle",
+      "about_team_title",
+      "about_team_subtitle",
+    ],
   },
   {
     title: "Textos de páginas",
@@ -83,7 +125,12 @@ export const SETTING_GROUPS: { title: string; keys: string[] }[] = [
   },
   {
     title: "Experiencia — recorrido",
-    keys: ["experience_journey_title", "experience_journey_intro", "experience_journey_steps"],
+    keys: [
+      "experience_journey_title",
+      "experience_journey_intro",
+      "experience_journey_steps",
+      "experience_owners_integration",
+    ],
   },
   {
     title: "Próximamente",
