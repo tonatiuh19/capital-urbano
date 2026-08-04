@@ -20,6 +20,11 @@ import AdminQuality from "./pages/admin/AdminQuality";
 import AdminNewsletter from "./pages/admin/AdminNewsletter";
 import AdminSettings from "./pages/admin/AdminSettings";
 import AdminAdmins from "./pages/admin/AdminAdmins";
+import AdminBlogPosts from "./pages/admin/AdminBlogPosts";
+import AdminBlogPostEditor from "./pages/admin/AdminBlogPostEditor";
+import AdminBlogAuthors from "./pages/admin/AdminBlogAuthors";
+import AdminBlogCategories from "./pages/admin/AdminBlogCategories";
+import AdminBlogTags from "./pages/admin/AdminBlogTags";
 import AdminGuard from "./components/admin/AdminGuard";
 import AdminLayout from "./components/admin/AdminLayout";
 import Index from "./pages/Index";
@@ -29,8 +34,11 @@ import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import Experience from "./pages/Experience";
 import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
+import BlogPost from "./pages/BlogPost";
 import NotFound from "./pages/NotFound";
 import SiteGate from "./components/SiteGate";
+import { BlogPublicGuard } from "./components/blog/BlogFeatureGuard";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { BrandClipDefs } from "@/components/brand/BrandClipDefs";
 
@@ -56,6 +64,12 @@ const App = () => (
                 <Route path="equipo" element={<AdminTeam />} />
                 <Route path="calidad" element={<AdminQuality />} />
                 <Route path="newsletter" element={<AdminNewsletter />} />
+                <Route path="blog" element={<AdminBlogPosts />} />
+                <Route path="blog/autores" element={<AdminBlogAuthors />} />
+                <Route path="blog/categorias" element={<AdminBlogCategories />} />
+                <Route path="blog/etiquetas" element={<AdminBlogTags />} />
+                <Route path="blog/nuevo" element={<AdminBlogPostEditor />} />
+                <Route path="blog/:id" element={<AdminBlogPostEditor />} />
                 <Route path="configuracion" element={<AdminSettings />} />
                 <Route path="administradores" element={<AdminAdmins />} />
               </Route>
@@ -72,6 +86,22 @@ const App = () => (
                     <Route path="/projects" element={<Projects />} />
                     <Route path="/projects/:slug" element={<ProjectDetail />} />
                     <Route path="/experience" element={<Experience />} />
+                    <Route
+                      path="/blog"
+                      element={
+                        <BlogPublicGuard>
+                          <Blog />
+                        </BlogPublicGuard>
+                      }
+                    />
+                    <Route
+                      path="/blog/:slug"
+                      element={
+                        <BlogPublicGuard>
+                          <BlogPost />
+                        </BlogPublicGuard>
+                      }
+                    />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>

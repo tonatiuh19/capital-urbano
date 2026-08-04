@@ -102,3 +102,78 @@ export interface DevelopmentsMapResponse {
   center: { lat: number; lng: number };
   markers: DevelopmentMapMarker[];
 }
+
+export type BlogPostStatus = "draft" | "scheduled" | "published" | "archived";
+
+export type BlogSectionType =
+  | "text"
+  | "heading"
+  | "image"
+  | "gallery"
+  | "youtube"
+  | "embed"
+  | "quote"
+  | "cta";
+
+export interface BlogAuthor {
+  id: number;
+  slug: string;
+  name: string;
+  role_title?: string | null;
+  bio?: string | null;
+  photo_url?: string | null;
+  is_active?: number;
+  display_order?: number;
+}
+
+export interface BlogCategory {
+  id: number;
+  slug: string;
+  name: string;
+  description?: string | null;
+  display_order?: number;
+  is_active?: number;
+}
+
+export interface BlogTag {
+  id: number;
+  slug: string;
+  name: string;
+}
+
+export interface BlogPostSection {
+  id?: number;
+  section_type: BlogSectionType;
+  title?: string | null;
+  body?: string | null;
+  image_url?: string | null;
+  /** Gallery URLs, youtube id, embed html, cta href, etc. */
+  meta_json?: Record<string, unknown> | string | null;
+  display_order: number;
+  is_active?: number;
+}
+
+export interface BlogPost {
+  id: number;
+  slug: string;
+  title: string;
+  excerpt?: string | null;
+  meta_title?: string | null;
+  meta_description?: string | null;
+  meta_keywords?: string | null;
+  hero_image_url?: string | null;
+  author_id?: number | null;
+  category_id?: number | null;
+  status: BlogPostStatus;
+  published_at?: string | null;
+  scheduled_at?: string | null;
+  is_featured?: number;
+  display_order?: number;
+  created_at?: string;
+  updated_at?: string;
+  author?: BlogAuthor | null;
+  category?: BlogCategory | null;
+  tags?: BlogTag[];
+  sections?: BlogPostSection[];
+  tag_ids?: number[];
+}

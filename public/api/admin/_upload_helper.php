@@ -4,7 +4,7 @@
  */
 
 function admin_upload_allowed_folders(): array {
-    return ['developments', 'team', 'brochures'];
+    return ['developments', 'team', 'brochures', 'blog'];
 }
 
 function admin_handle_image_upload(string $folder): void {

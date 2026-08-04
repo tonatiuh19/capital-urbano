@@ -4,10 +4,15 @@ import { getAdminApiError } from "@/lib/adminApi";
 import { AdminFormField, AdminFormSection, inputClass } from "@/components/admin/AdminFormField";
 import { getSettingMeta, groupSettings } from "@/lib/adminSettingLabels";
 import { PUBLIC_STAT_KEYS } from "@/lib/adminContentGaps";
+import { FEATURE_BLOG_SETTING_KEY } from "@/lib/featureFlags";
+import { queryClient } from "@/lib/queryClient";
+import { useAppDispatch } from "@/store/hooks";
+import { fetchSiteConfig } from "@/store/slices/siteConfigSlice";
 
 type Setting = { setting_key: string; setting_value: string; is_public: number };
 
 export default function AdminSettings() {
+  const dispatch = useAppDispatch();
   const [settings, setSettings] = useState<Setting[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -16,7 +21,12 @@ export default function AdminSettings() {
   useEffect(() => {
     adminAxios
       .get("/api/admin/settings.php")
-      .then((res) => setSettings(res.data.settings))
+      .then((res) => {
+        const rows = ((res.data.settings ?? []) as Setting[]).filter(
+          (s) => s.setting_key !== FEATURE_BLOG_SETTING_KEY,
+        );
+        setSettings(rows);
+      })
       .catch((err) =>
         setMsg({ type: "err", text: getAdminApiError(err, "Error al cargar") }),
       )
@@ -40,7 +50,11 @@ export default function AdminSettings() {
           is_public: s.is_public,
         })),
       })
-      .then(() => setMsg({ type: "ok", text: "Configuración guardada." }))
+      .then(() => {
+        setMsg({ type: "ok", text: "Configuración guardada." });
+        void queryClient.invalidateQueries({ queryKey: ["site-config"] });
+        void dispatch(fetchSiteConfig());
+      })
       .catch((err) => setMsg({ type: "err", text: getAdminApiError(err) }))
       .finally(() => setSaving(false));
   };

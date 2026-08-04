@@ -3,14 +3,16 @@ import { NavLink } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { useHomeHeroImmersive } from "@/hooks/useHomeHeroImmersive";
+import { useBlogFeatureEnabled } from "@/lib/featureFlags";
 import { cn } from "@/lib/utils";
 
-const navItems = [
+const baseNavItems = [
   { label: "Inicio", href: "/" },
   { label: "Nosotros", href: "/about" },
   { label: "Calidad", href: "/quality" },
   { label: "Proyectos", href: "/projects" },
   { label: "Experiencia", href: "/experience" },
+  { label: "Blog", href: "/blog", feature: "blog" as const },
   { label: "Contacto", href: "/contact" },
 ] as const;
 
@@ -24,7 +26,7 @@ function navClassName(isActive: boolean, mobile = false) {
         : "text-cu-black hover:text-cu-orange hover:bg-cu-warm-white"
     }`;
   }
-  return `${base} px-4 py-2 text-sm ${
+  return `${base} px-2.5 xl:px-3 py-2 text-[13px] xl:text-sm ${
     isActive
       ? "text-cu-orange bg-cu-orange/10 font-semibold"
       : "text-cu-black hover:text-cu-orange"
@@ -37,6 +39,10 @@ type HeaderProps = {
 };
 
 export function Header({ immersiveUntilScroll = false }: HeaderProps) {
+  const { enabled: blogEnabled } = useBlogFeatureEnabled();
+  const navItems = baseNavItems.filter(
+    (item) => !("feature" in item && item.feature === "blog") || blogEnabled,
+  );
   const { isImmersive: immersive, pastHeroIntro } =
     useHomeHeroImmersive(immersiveUntilScroll);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -68,7 +74,7 @@ export function Header({ immersiveUntilScroll = false }: HeaderProps) {
 
         <div
           className={cn(
-            "hidden lg:flex items-center gap-1 transition-all duration-500 ease-out",
+            "hidden lg:flex items-center gap-0.5 xl:gap-1 transition-all duration-500 ease-out",
             immersive
               ? "opacity-0 invisible pointer-events-none -translate-y-2 max-w-0 overflow-hidden"
               : "opacity-100 visible pointer-events-auto translate-y-0 max-w-none",

@@ -150,14 +150,20 @@ export function groupSettings<T extends { setting_key: string }>(
 
   for (const g of SETTING_GROUPS) {
     const items = settings.filter(
-      (s) => g.keys.includes(s.setting_key) && s.setting_key !== "under_construction",
+      (s) =>
+        g.keys.includes(s.setting_key) &&
+        s.setting_key !== "under_construction" &&
+        s.setting_key !== "feature_blog_enabled",
     );
     items.forEach((s) => used.add(s.setting_key));
     if (items.length > 0) groups.push({ title: g.title, items });
   }
 
   const rest = settings.filter(
-    (s) => !used.has(s.setting_key) && s.setting_key !== "under_construction",
+    (s) =>
+      !used.has(s.setting_key) &&
+      s.setting_key !== "under_construction" &&
+      s.setting_key !== "feature_blog_enabled",
   );
   if (rest.length > 0) {
     groups.push({ title: "Otros", items: rest });

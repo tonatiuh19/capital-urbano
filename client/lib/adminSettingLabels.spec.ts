@@ -23,13 +23,15 @@ describe("adminSettingLabels", () => {
     expect(otros?.items.some((i) => i.setting_key === "orphan_key")).toBe(true);
   });
 
-  it("excludes under_construction from groups", () => {
+  it("excludes under_construction and feature_blog_enabled from groups", () => {
     const grouped = groupSettings([
       { setting_key: "under_construction", setting_value: "1" },
+      { setting_key: "feature_blog_enabled", setting_value: "0" },
       { setting_key: "stat_families", setting_value: "" },
     ]);
     const flat = grouped.flatMap((g) => g.items.map((i) => i.setting_key));
     expect(flat).not.toContain("under_construction");
+    expect(flat).not.toContain("feature_blog_enabled");
     expect(flat).toContain("stat_families");
   });
 

@@ -155,6 +155,8 @@ switch ($action) {
             json_respond(['valid' => false]);
         }
 
+        $admin['id'] = (int) $admin['id'];
+
         json_respond(['valid' => true, 'admin' => $admin]);
         break;
     }

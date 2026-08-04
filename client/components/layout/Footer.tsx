@@ -11,10 +11,12 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setLocked, BYPASS_KEY } from "@/store/slices/siteConfigSlice";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { BRAND_TAGLINE, BRAND_FOOTER_BLURB } from "@/lib/brand/copy";
+import { isBlogFeatureEnabled } from "@/lib/featureFlags";
 
 export function Footer() {
   const dispatch = useAppDispatch();
   const { config } = useAppSelector((s) => s.siteConfig);
+  const blogEnabled = isBlogFeatureEnabled(config);
   const currentYear = new Date().getFullYear();
   const [logoClicks, setLogoClicks] = useState(0);
   const logoClickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -158,6 +160,16 @@ export function Footer() {
                   Calidad
                 </Link>
               </li>
+              {blogEnabled && (
+                <li>
+                  <Link
+                    to="/blog"
+                    className="text-gray-400 hover:text-cu-orange transition-colors text-sm"
+                  >
+                    Blog
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
 

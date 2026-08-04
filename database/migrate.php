@@ -4,7 +4,10 @@
  * migrate.php — Simple SQL migration runner
  *
  * Usage (from project root or server terminal):
- *   php database/migrate.php [--dry-run]
+ *   php database/migrate.php [--dry-run] [--mark-applied]
+ *
+ * --mark-applied: record pending migrations as done without executing SQL
+ *   (use after importing database/schema.sql so the ledger matches the dump).
  *
  * Reads all database/migrations/*.sql files in order and runs any
  * that have not been recorded in the `schema_migrations` table.
@@ -18,6 +21,7 @@
 $config = load_config();
 
 $dryRun = in_array('--dry-run', $argv ?? [], true);
+$markApplied = in_array('--mark-applied', $argv ?? [], true);
 
 // ── Connect ───────────────────────────────────────────────────────────────────
 try {
@@ -75,6 +79,14 @@ foreach ($files as $file) {
     $pending++;
     $sql = file_get_contents($file);
 
+    if ($markApplied) {
+        $pdo->prepare("INSERT INTO schema_migrations (migration) VALUES (?)")
+            ->execute([$name]);
+        echo "[MARK]  {$name} (recorded without running)\n";
+        $ran++;
+        continue;
+    }
+
     if ($dryRun) {
         echo "[DRY]   {$name} — would run\n";
         continue;
@@ -96,7 +108,9 @@ foreach ($files as $file) {
         echo "OK\n";
         $ran++;
     } catch (PDOException $e) {
-        $pdo->rollBack();
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
         echo "FAILED\n";
         echo "  Error: " . $e->getMessage() . "\n";
         echo "  Migration stopped. Fix the error and re-run.\n";
@@ -106,6 +120,8 @@ foreach ($files as $file) {
 
 if ($dryRun) {
     echo "\n[DRY RUN] {$pending} pending migration(s) — nothing was applied.\n";
+} elseif ($markApplied && $ran > 0) {
+    echo "\nDone. {$ran} migration(s) marked applied (SQL not executed).\n";
 } elseif ($ran === 0 && $pending === 0) {
     echo "\nAll migrations already applied. Nothing to do.\n";
 } else {
@@ -127,18 +143,45 @@ function split_sql(string $sql): array
 }
 
 /**
- * Load DB credentials. Tries env vars first, then falls back to
- * prompting the user interactively.
+ * Load DB credentials. Order: env vars → public/api/_config.php → readline defaults.
  */
 function load_config(): array
 {
-    $host    = getenv('DB_HOST')    ?: readline_or_default('DB host',    'localhost');
-    $name    = getenv('DB_NAME')    ?: readline_or_default('DB name',    '');
-    $user    = getenv('DB_USER')    ?: readline_or_default('DB user',    '');
-    $pass    = getenv('DB_PASS')    ?: readline_or_default('DB password','');
-    $charset = getenv('DB_CHARSET') ?: 'utf8mb4';
+    $configFile = dirname(__DIR__) . '/public/api/_config.php';
+    if (is_file($configFile) && !defined('DB_HOST')) {
+        if (!defined('APP_INIT')) {
+            define('APP_INIT', true);
+        }
+        // Suppress die on direct access — APP_INIT is set
+        require_once $configFile;
+    }
 
-    return compact('host', 'name', 'user', 'pass', 'charset');
+    $host    = getenv('DB_HOST') ?: (defined('DB_HOST') ? DB_HOST : null);
+    $name    = getenv('DB_NAME') ?: (defined('DB_NAME') ? DB_NAME : null);
+    $user    = getenv('DB_USER') ?: (defined('DB_USER') ? DB_USER : null);
+    $pass    = getenv('DB_PASS');
+    if ($pass === false || $pass === null || $pass === '') {
+        $pass = defined('DB_PASS') ? DB_PASS : null;
+    }
+    $charset = getenv('DB_CHARSET') ?: (defined('DB_CHARSET') ? DB_CHARSET : 'utf8mb4');
+
+    // Non-interactive: prefer config constants; only prompt if still missing
+    if (!$host || !$name || !$user) {
+        $host = $host ?: readline_or_default('DB host', 'localhost');
+        $name = $name ?: readline_or_default('DB name', '');
+        $user = $user ?: readline_or_default('DB user', '');
+        if ($pass === null || $pass === '') {
+            $pass = readline_or_default('DB password', '');
+        }
+    }
+
+    return [
+        'host' => (string) $host,
+        'name' => (string) $name,
+        'user' => (string) $user,
+        'pass' => (string) ($pass ?? ''),
+        'charset' => (string) $charset,
+    ];
 }
 
 function readline_or_default(string $prompt, string $default): string

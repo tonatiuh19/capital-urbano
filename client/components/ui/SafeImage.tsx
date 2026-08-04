@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Building2 } from "lucide-react";
 
 type SafeImageProps = {
@@ -17,6 +17,10 @@ export function SafeImage({
   showNameOnFallback = false,
 }: SafeImageProps) {
   const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setFailed(false);
+  }, [src]);
 
   if (!src || failed) {
     return (

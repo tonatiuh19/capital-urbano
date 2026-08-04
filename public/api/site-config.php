@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     json_respond(['error' => 'Método no permitido'], 405);
 }
 
-$booleanKeys = ['under_construction'];
+$booleanKeys = ['under_construction', 'feature_blog_enabled'];
 $numericKeys = ['map_lat', 'map_lng'];
 $config = [];
 
@@ -43,6 +43,9 @@ try {
 
 if (!isset($config['under_construction'])) {
     $config['under_construction'] = false;
+}
+if (!isset($config['feature_blog_enabled'])) {
+    $config['feature_blog_enabled'] = true;
 }
 
 json_respond(['config' => $config, 'settings' => $config]);

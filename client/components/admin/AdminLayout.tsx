@@ -18,8 +18,18 @@ const nav = [
   { to: "/admin/equipo", label: "Equipo" },
   { to: "/admin/calidad", label: "Calidad" },
   { to: "/admin/newsletter", label: "Newsletter" },
+  {
+    to: "/admin/blog",
+    label: "Blog",
+    children: [
+      { to: "/admin/blog", label: "Artículos", end: true },
+      { to: "/admin/blog/autores", label: "Autores" },
+      { to: "/admin/blog/categorias", label: "Categorías" },
+      { to: "/admin/blog/etiquetas", label: "Etiquetas" },
+    ],
+  },
   { to: "/admin/configuracion", label: "Configuración" },
-];
+] as const;
 
 function AdminSidebar({
   admin,
@@ -37,20 +47,54 @@ function AdminSidebar({
       <AdminSidebarHeader />
       <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto overscroll-contain">
         {nav.map((item) => {
-          const active = location.pathname.startsWith(item.to);
+          const children = "children" in item ? item.children : undefined;
+          const active = children
+            ? location.pathname === item.to ||
+              location.pathname.startsWith(`${item.to}/`)
+            : location.pathname.startsWith(item.to);
+
           return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={onNavigate}
-              className={`block px-3 py-2.5 text-sm rounded-sm transition-colors font-montserrat ${
-                active
-                  ? "bg-cu-orange text-cu-black font-semibold"
-                  : "text-white/70 hover:bg-white/10 hover:text-white"
-              }`}
-            >
-              {item.label}
-            </NavLink>
+            <div key={item.to}>
+              <NavLink
+                to={item.to}
+                end={!children}
+                onClick={onNavigate}
+                className={`block px-3 py-2.5 text-sm rounded-sm transition-colors font-montserrat ${
+                  active && !children
+                    ? "bg-cu-orange text-cu-black font-semibold"
+                    : active && children
+                      ? "bg-white/10 text-white font-semibold"
+                      : "text-white/70 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </NavLink>
+              {children && active && (
+                <div className="ml-2 mt-0.5 mb-1 space-y-0.5 border-l border-white/15 pl-2">
+                  {children.map((child) => {
+                    const childEnd = "end" in child && child.end;
+                    const childActive = childEnd
+                      ? location.pathname === child.to
+                      : location.pathname.startsWith(child.to);
+                    return (
+                      <NavLink
+                        key={child.to}
+                        to={child.to}
+                        end={!!childEnd}
+                        onClick={onNavigate}
+                        className={`block px-2.5 py-1.5 text-xs rounded-sm font-montserrat ${
+                          childActive
+                            ? "bg-cu-orange text-cu-black font-semibold"
+                            : "text-white/60 hover:bg-white/10 hover:text-white"
+                        }`}
+                      >
+                        {child.label}
+                      </NavLink>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           );
         })}
         {admin?.role === "superadmin" && (

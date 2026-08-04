@@ -41,6 +41,14 @@ export const PUBLIC_ROUTES = {
     keywords:
       "experiencia cliente, inversión inmobiliaria, preventa departamentos, Capital Urbano",
   },
+  blog: {
+    path: "/blog",
+    title: "Blog",
+    description:
+      "Ideas, trayectoria y novedades de Capital Urbano sobre vivienda vertical e inversión en Guadalajara.",
+    keywords:
+      "blog Capital Urbano, noticias inmobiliarias Guadalajara, vivienda vertical, desarrollos",
+  },
   contact: {
     path: "/contact",
     title: "Contacto",

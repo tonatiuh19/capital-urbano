@@ -1,7 +1,7 @@
 import adminAxios from "@/store/axiosAdmin";
 import { getAdminApiError } from "@/lib/adminApi";
 
-export type AdminUploadFolder = "developments" | "team" | "brochures";
+export type AdminUploadFolder = "developments" | "team" | "brochures" | "blog";
 
 export async function uploadAdminImage(
   file: File,

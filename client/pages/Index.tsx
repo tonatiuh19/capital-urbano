@@ -5,6 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
 import { HeroBackground } from "@/components/home/HeroBackground";
 import { DeveloperExperienceSection } from "@/components/home/DeveloperExperienceSection";
+import { HomeBlogSection } from "@/components/home/HomeBlogSection";
 import { DevelopmentCard } from "@/components/projects/DevelopmentCard";
 import { DevelopmentsMap } from "@/components/projects/DevelopmentsMap";
 import { apiGet } from "@/lib/api";
@@ -325,6 +326,8 @@ export default function Index() {
           </motion.div>
         </div>
       </section>
+
+      <HomeBlogSection />
 
       {/* Quality Pillars Section */}
       <section

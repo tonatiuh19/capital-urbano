@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { Link } from "react-router-dom";
 import adminAxios from "@/store/axiosAdmin";
 import { getAdminApiError } from "@/lib/adminApi";
 import { AdminTable } from "@/components/admin/AdminTable";
@@ -6,7 +7,8 @@ import { AdminPreviewCard } from "@/components/admin/AdminPreviewCard";
 import { AdminImageField } from "@/components/admin/AdminImageField";
 import { AdminFormField, inputClass } from "@/components/admin/AdminFormField";
 import type { AdminUploadFolder } from "@/lib/adminUpload";
-import { Plus } from "lucide-react";
+import { slugify } from "@/lib/slugify";
+import { ArrowLeft, Plus } from "lucide-react";
 
 export type Field = {
   key: string;
@@ -38,6 +40,11 @@ export function AdminSimpleCrud({
   formDescription,
   emptyStateMessage,
   emptyStateCtaLabel = "Agregar primer registro",
+  backLink,
+  /** When set (e.g. "name"), keep slug in sync until the admin edits slug manually. */
+  autoSlugFrom,
+  /** Always-visible helper legend under the page title. */
+  legend,
 }: {
   title: string;
   apiPath: string;
@@ -48,6 +55,9 @@ export function AdminSimpleCrud({
   formDescription?: string;
   emptyStateMessage?: string;
   emptyStateCtaLabel?: string;
+  backLink?: { to: string; label: string };
+  autoSlugFrom?: string;
+  legend?: ReactNode;
 }) {
   const [items, setItems] = useState<Record<string, unknown>[]>([]);
   const [form, setForm] = useState<Record<string, unknown>>({});
@@ -55,6 +65,7 @@ export function AdminSimpleCrud({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [imageUploading, setImageUploading] = useState(false);
+  const [slugTouched, setSlugTouched] = useState(false);
   const [message, setMessage] = useState<{ type: "ok" | "err"; text: string } | null>(
     null,
   );
@@ -107,6 +118,7 @@ export function AdminSimpleCrud({
       }
     }
     setForm(empty);
+    setSlugTouched(false);
     setMessage(null);
     setShowForm(true);
   };
@@ -124,6 +136,7 @@ export function AdminSimpleCrud({
       }
     }
     setForm(next);
+    setSlugTouched(true);
     setMessage(null);
     setShowForm(true);
   };
@@ -261,7 +274,17 @@ export function AdminSimpleCrud({
             type={f.type === "number" ? "number" : "text"}
             maxLength={f.maxLength}
             value={String(form[f.key] ?? "")}
-            onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (autoSlugFrom && f.key === autoSlugFrom && !slugTouched) {
+                setForm({ ...form, [f.key]: val, slug: slugify(val) });
+                return;
+              }
+              if (f.key === "slug") {
+                setSlugTouched(true);
+              }
+              setForm({ ...form, [f.key]: val });
+            }}
             className={inputClass}
             placeholder={f.placeholder}
           />
@@ -274,6 +297,14 @@ export function AdminSimpleCrud({
     <div className="cu-admin-page space-y-6 min-w-0">
       <div className="flex flex-wrap justify-between items-center gap-4">
         <div>
+          {backLink && (
+            <Link
+              to={backLink.to}
+              className="inline-flex items-center gap-1 text-sm text-cu-concrete hover:text-cu-orange mb-2"
+            >
+              <ArrowLeft size={14} /> {backLink.label}
+            </Link>
+          )}
           <h1 className="font-montserrat font-bold text-2xl text-cu-black">{title}</h1>
           {!loading && items.length > 0 && card && (
             <p className="text-sm text-cu-concrete mt-1">{items.length} registros</p>
@@ -289,6 +320,12 @@ export function AdminSimpleCrud({
           </button>
         )}
       </div>
+
+      {legend && (
+        <aside className="rounded-sm border border-cu-stone/25 bg-cu-warm-white/70 px-4 py-3 text-sm text-cu-concrete font-josefin leading-relaxed">
+          {legend}
+        </aside>
+      )}
 
       {message && (
         <p

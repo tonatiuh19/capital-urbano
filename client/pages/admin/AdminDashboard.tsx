@@ -20,6 +20,7 @@ interface DashData {
 type GapPayload = {
   settings: Record<string, string>;
   team_members: Parameters<typeof analyzeAdminContentGaps>[0]["teamMembers"];
+  blog?: Parameters<typeof analyzeAdminContentGaps>[0]["blog"];
 };
 
 export default function AdminDashboard() {
@@ -39,8 +40,9 @@ export default function AdminDashboard() {
     () =>
       gapPayload
         ? analyzeAdminContentGaps({
-            settings: gapPayload.settings,
-            teamMembers: gapPayload.team_members,
+            settings: gapPayload.settings ?? {},
+            teamMembers: gapPayload.team_members ?? [],
+            blog: gapPayload.blog,
           })
         : [],
     [gapPayload],
@@ -77,7 +79,7 @@ export default function AdminDashboard() {
 
         {gaps.length === 0 ? (
           <p className="text-sm text-cu-concrete bg-green-50 border border-green-200 rounded-sm px-4 py-3">
-            Estadísticas, equipo y contacto tienen la información mínima. Revisa periódicamente en{" "}
+            Estadísticas, equipo, contacto y blog tienen la información mínima. Revisa periódicamente en{" "}
             <Link to="/admin/configuracion" className="text-cu-orange font-semibold hover:underline">
               Configuración
             </Link>{" "}

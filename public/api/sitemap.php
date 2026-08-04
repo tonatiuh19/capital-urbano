@@ -22,9 +22,29 @@ $static = [
 ];
 
 $pdo = db_connect();
+require_once __DIR__ . '/_blog.php';
+$blogEnabled = blog_feature_enabled($pdo);
+if ($blogEnabled) {
+    $static[] = ['loc' => '/blog', 'changefreq' => 'weekly', 'priority' => '0.8'];
+}
+
 $projects = $pdo->query(
     "SELECT slug, updated_at FROM developments WHERE is_active = 1 ORDER BY display_order, name"
 )->fetchAll();
+
+$posts = [];
+if ($blogEnabled) {
+    try {
+        $posts = $pdo->query(
+            "SELECT slug, updated_at FROM blog_posts
+             WHERE status = 'published'
+               AND (published_at IS NULL OR published_at <= NOW())
+             ORDER BY published_at DESC"
+        )->fetchAll();
+    } catch (Throwable $e) {
+        $posts = [];
+    }
+}
 
 echo '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
 echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
@@ -43,6 +63,18 @@ foreach ($projects as $p) {
     echo '    <loc>' . htmlspecialchars($origin . $path, ENT_XML1) . "</loc>\n";
     echo "    <changefreq>weekly</changefreq>\n";
     echo "    <priority>0.7</priority>\n";
+    if (!empty($p['updated_at'])) {
+        echo '    <lastmod>' . date('Y-m-d', strtotime($p['updated_at'])) . "</lastmod>\n";
+    }
+    echo "  </url>\n";
+}
+
+foreach ($posts as $p) {
+    $path = '/blog/' . $p['slug'];
+    echo "  <url>\n";
+    echo '    <loc>' . htmlspecialchars($origin . $path, ENT_XML1) . "</loc>\n";
+    echo "    <changefreq>weekly</changefreq>\n";
+    echo "    <priority>0.6</priority>\n";
     if (!empty($p['updated_at'])) {
         echo '    <lastmod>' . date('Y-m-d', strtotime($p['updated_at'])) . "</lastmod>\n";
     }

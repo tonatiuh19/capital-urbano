@@ -146,6 +146,19 @@ echo json_encode(['data' => 'value']);
 
 ---
 
+## Blog publish cron
+
+Scheduled posts are also promoted when `/api/blog.php` or the admin blog API is hit. For reliable publishing without traffic, add a cron job (every 5–15 minutes):
+
+```bash
+# Example: Banahosting cron → Fetch URL
+https://YOUR_DOMAIN/api/cron/publish-blog.php?secret=YOUR_CRON_SECRET
+```
+
+`CRON_SECRET` must match `define('CRON_SECRET', ...)` in `public/api/_config.php` (see `_config.example.php`).
+
+---
+
 ## Environment Variables on Banahosting
 
 PHP reads environment variables via `getenv()`. Set them in cPanel under **Software → PHP Variables** or in a `.htaccess` file:

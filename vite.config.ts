@@ -12,6 +12,11 @@ export default defineConfig({
         target: "http://localhost:9000",
         changeOrigin: true,
       },
+      // Admin/public images live under public/uploads (PHP server), not the Vite root
+      "/uploads": {
+        target: "http://localhost:9000",
+        changeOrigin: true,
+      },
     },
     fs: {
       allow: ["./client", "./shared", "index.html"],

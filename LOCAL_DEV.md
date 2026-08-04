@@ -44,7 +44,8 @@ API (proxied): **http://localhost:8080/api/ping.php**
 Browser → http://localhost:8080
              │
              ├── Vite (React HMR)
-             └── /api/* → proxy → http://localhost:9000/public/api/*.php
+             └── /api/*     → proxy → http://localhost:9000/api/*
+             └── /uploads/* → proxy → http://localhost:9000/uploads/*
 ```
 
 ---
@@ -110,7 +111,13 @@ Also confirm **Remote MySQL®** allows your IP (liv working usually means this i
 DB_HOST=50.31.188.69 DB_NAME=gmwbyxyp_capital-urbano DB_USER=… DB_PASS=… npm run db:migrate
 ```
 
-Or set the same values in `_config.php` and run `npm run db:migrate` after extending `migrate.php` to read `_config.php` (optional).
+Or just `npm run db:migrate` — `database/migrate.php` reads `public/api/_config.php` when env vars are unset.
+
+If you imported `database/schema.sql` fresh and the migration ledger is empty/behind, sync it without re-running SQL:
+
+```bash
+php database/migrate.php --mark-applied
+```
 
 ---
 

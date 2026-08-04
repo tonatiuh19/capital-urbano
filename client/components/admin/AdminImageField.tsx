@@ -4,6 +4,11 @@ import { assetUrl } from "@/lib/api";
 import { uploadAdminImage, type AdminUploadFolder } from "@/lib/adminUpload";
 import { AdminFormField, inputClass } from "@/components/admin/AdminFormField";
 import { SafeImage } from "@/components/ui/SafeImage";
+import {
+  isPendingUploadUrl,
+  registerPendingUpload,
+  unregisterPendingUpload,
+} from "@/lib/pendingUploads";
 
 type AdminImageFieldProps = {
   id: string;
@@ -12,7 +17,10 @@ type AdminImageFieldProps = {
   value: string;
   onChange: (url: string) => void;
   folder: AdminUploadFolder;
-  /** Upload immediately when a file is picked (liv-capital: preview first, upload on save optional). */
+  /**
+   * When true (default), upload as soon as a file is picked.
+   * When false, keep a local blob preview and upload on form save.
+   */
   uploadOnSelect?: boolean;
   onUploadingChange?: (uploading: boolean) => void;
 };
@@ -28,24 +36,16 @@ export function AdminImageField({
   onUploadingChange,
 }: AdminImageFieldProps) {
   const [uploading, setUploading] = useState(false);
-  const [pendingFile, setPendingFile] = useState<File | null>(null);
-  const [localPreview, setLocalPreview] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     onUploadingChange?.(uploading);
   }, [uploading, onUploadingChange]);
 
-  useEffect(() => {
-    return () => {
-      if (localPreview) URL.revokeObjectURL(localPreview);
-    };
-  }, [localPreview]);
-
-  const clearPending = () => {
-    if (localPreview) URL.revokeObjectURL(localPreview);
-    setPendingFile(null);
-    setLocalPreview("");
+  const clearValue = () => {
+    if (isPendingUploadUrl(value)) unregisterPendingUpload(value);
+    onChange("");
+    setError(null);
   };
 
   const runUpload = async (file: File) => {
@@ -54,7 +54,6 @@ export function AdminImageField({
     try {
       const url = await uploadAdminImage(file, folder);
       onChange(url);
-      clearPending();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error al subir");
     } finally {
@@ -67,34 +66,41 @@ export function AdminImageField({
     e.target.value = "";
     if (!file) return;
 
-    if (localPreview) URL.revokeObjectURL(localPreview);
-    setPendingFile(file);
-    setLocalPreview(URL.createObjectURL(file));
     setError(null);
 
     if (uploadOnSelect) {
       await runUpload(file);
+      return;
     }
+
+    if (isPendingUploadUrl(value)) unregisterPendingUpload(value);
+    const blobUrl = URL.createObjectURL(file);
+    registerPendingUpload(blobUrl, file);
+    onChange(blobUrl);
   };
 
-  const previewSrc = localPreview || (value ? assetUrl(value) : "");
+  const pending = isPendingUploadUrl(value);
+  const previewSrc = pending ? value : value ? assetUrl(value) : "";
 
   return (
     <AdminFormField id={id} label={label} hint={hint}>
       {previewSrc && (
         <div className="relative mb-3 group rounded-sm overflow-hidden border border-cu-stone/25">
           <SafeImage
+            key={previewSrc}
             src={previewSrc}
             alt="Vista previa"
             className="w-full h-40 object-cover"
             fallbackClassName="w-full h-40 bg-cu-warm-white"
           />
+          {pending && (
+            <span className="absolute bottom-2 left-2 text-[10px] font-montserrat font-semibold uppercase tracking-wide bg-black/60 text-white px-1.5 py-0.5 rounded-sm">
+              Pendiente de subir
+            </span>
+          )}
           <button
             type="button"
-            onClick={() => {
-              clearPending();
-              onChange("");
-            }}
+            onClick={clearValue}
             className="absolute top-2 right-2 bg-black/55 text-white rounded-full opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity p-2 min-h-[44px] min-w-[44px] flex items-center justify-center sm:min-h-0 sm:min-w-0 sm:p-1"
             aria-label="Quitar imagen"
           >
@@ -107,10 +113,18 @@ export function AdminImageField({
         <input
           id={id}
           type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+          value={pending ? "" : value}
+          onChange={(e) => {
+            if (isPendingUploadUrl(value)) unregisterPendingUpload(value);
+            onChange(e.target.value);
+          }}
           className={`${inputClass} flex-1 min-w-0`}
-          placeholder="https://… o /uploads/…"
+          placeholder={
+            pending
+              ? "Archivo local · se sube al guardar"
+              : "https://… o /uploads/…"
+          }
+          disabled={pending}
         />
         <label
           className={`shrink-0 cursor-pointer inline-flex items-center justify-center gap-1.5 px-3 py-2 border border-cu-stone/30 rounded-sm text-xs font-montserrat font-semibold text-cu-black hover:border-cu-orange/50 hover:bg-cu-warm-white ${
@@ -122,7 +136,11 @@ export function AdminImageField({
           ) : (
             <Upload className="w-3.5 h-3.5" />
           )}
-          {uploading ? "Subiendo…" : "Subir archivo"}
+          {uploading
+            ? "Subiendo…"
+            : uploadOnSelect
+              ? "Subir archivo"
+              : "Adjuntar archivo"}
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp"
@@ -133,20 +151,20 @@ export function AdminImageField({
         </label>
       </div>
 
-      {!uploadOnSelect && pendingFile && (
-        <button
-          type="button"
-          onClick={() => runUpload(pendingFile)}
-          disabled={uploading}
-          className="text-xs font-montserrat font-semibold text-cu-orange hover:underline disabled:opacity-50"
-        >
-          Confirmar subida del archivo seleccionado
-        </button>
-      )}
-
       <p className="text-[11px] text-cu-concrete">
-        JPG, PNG o WebP · máximo 5 MB. Se guarda en{" "}
-        <code className="text-cu-black/80">/uploads/{folder}/</code>
+        JPG, PNG o WebP · máximo 5 MB
+        {uploadOnSelect ? (
+          <>
+            . Se guarda en{" "}
+            <code className="text-cu-black/80">/uploads/{folder}/</code>
+          </>
+        ) : (
+          <>
+            . Vista previa local; se sube a{" "}
+            <code className="text-cu-black/80">/uploads/{folder}/</code> al
+            guardar el artículo.
+          </>
+        )}
       </p>
 
       {error && (
@@ -156,13 +174,4 @@ export function AdminImageField({
       )}
     </AdminFormField>
   );
-}
-
-/** Call before save when uploadOnSelect is false and a file is still pending. */
-export async function flushPendingImageUpload(
-  pendingFile: File | null,
-  folder: AdminUploadFolder,
-): Promise<string | null> {
-  if (!pendingFile) return null;
-  return uploadAdminImage(pendingFile, folder);
 }

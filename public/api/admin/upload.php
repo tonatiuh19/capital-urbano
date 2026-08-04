@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $pdo = db_connect();
-require_admin($pdo);
+$admin = require_admin($pdo);
 
 $folder = $_POST['folder'] ?? 'developments';
 admin_handle_image_upload($folder);

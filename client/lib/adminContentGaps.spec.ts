@@ -67,6 +67,34 @@ describe("analyzeAdminContentGaps — empty / no data", () => {
     );
     expect(countGapsBySeverity(gaps).warn).toBeGreaterThanOrEqual(5);
   });
+
+  it("tolerates undefined teamMembers and settings without throwing", () => {
+    const gaps = analyzeAdminContentGaps({
+      settings: undefined as unknown as Record<string, string>,
+      teamMembers: undefined as unknown as [],
+    });
+    expect(gaps.length).toBeGreaterThan(0);
+    expect(gaps.some((g) => g.id === "team-leadership-empty")).toBe(true);
+  });
+
+  it("flags empty blog authors, categories, and published posts when blog stats provided", () => {
+    const gaps = analyzeAdminContentGaps({
+      settings: COMPLETE_SETTINGS,
+      teamMembers: [...COMPLETE_TEAM],
+      blog: {
+        published_count: 0,
+        author_count: 0,
+        category_count: 0,
+      },
+    });
+    expect(gaps.map((g) => g.id)).toEqual(
+      expect.arrayContaining([
+        "blog-authors-empty",
+        "blog-categories-empty",
+        "blog-posts-empty",
+      ]),
+    );
+  });
 });
 
 describe("analyzeAdminContentGaps — stat edge cases", () => {
@@ -182,13 +210,26 @@ describe("analyzeAdminContentGaps — team edge cases", () => {
 });
 
 describe("analyzeAdminContentGaps — complete data", () => {
-  it("returns no gaps when stats, contact, and all sections are filled", () => {
+  it("returns no gaps when stats, contact, team, and blog are filled", () => {
+    const gaps = analyzeAdminContentGaps({
+      settings: COMPLETE_SETTINGS,
+      teamMembers: [...COMPLETE_TEAM],
+      blog: {
+        published_count: 1,
+        author_count: 1,
+        category_count: 1,
+      },
+    });
+    expect(gaps).toHaveLength(0);
+    expect(countGapsBySeverity(gaps)).toEqual({ warn: 0, info: 0 });
+  });
+
+  it("ignores blog gaps when blog stats omitted", () => {
     const gaps = analyzeAdminContentGaps({
       settings: COMPLETE_SETTINGS,
       teamMembers: [...COMPLETE_TEAM],
     });
-    expect(gaps).toHaveLength(0);
-    expect(countGapsBySeverity(gaps)).toEqual({ warn: 0, info: 0 });
+    expect(gaps.some((g) => g.id.startsWith("blog-"))).toBe(false);
   });
 });
 

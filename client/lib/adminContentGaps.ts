@@ -39,9 +39,17 @@ function isActive(member: TeamMemberGapInput): boolean {
 export function analyzeAdminContentGaps(input: {
   settings: Record<string, string | undefined>;
   teamMembers: TeamMemberGapInput[];
+  blog?: {
+    published_count?: number;
+    author_count?: number;
+    category_count?: number;
+    scheduled_count?: number;
+  };
 }): ContentGap[] {
   const gaps: ContentGap[] = [];
-  const { settings, teamMembers } = input;
+  const settings = input.settings ?? {};
+  const teamMembers = Array.isArray(input.teamMembers) ? input.teamMembers : [];
+  const blog = input.blog;
   const activeMembers = teamMembers.filter(isActive);
 
   for (const stat of STAT_KEYS) {
@@ -149,6 +157,40 @@ export function analyzeAdminContentGaps(input: {
       link: "/admin/configuracion",
       actionLabel: "Agregar dirección",
     });
+  }
+
+  if (blog) {
+    const authors = blog.author_count ?? 0;
+    const categories = blog.category_count ?? 0;
+    const published = blog.published_count ?? 0;
+
+    if (authors === 0) {
+      gaps.push({
+        id: "blog-authors-empty",
+        severity: "warn",
+        message: "El blog no tiene autores activos — no podrás firmar artículos.",
+        link: "/admin/blog/autores",
+        actionLabel: "Crear autor",
+      });
+    }
+    if (categories === 0) {
+      gaps.push({
+        id: "blog-categories-empty",
+        severity: "warn",
+        message: "El blog no tiene categorías — organiza el contenido antes de publicar.",
+        link: "/admin/blog/categorias",
+        actionLabel: "Crear categoría",
+      });
+    }
+    if (published === 0) {
+      gaps.push({
+        id: "blog-posts-empty",
+        severity: "info",
+        message: "Aún no hay artículos publicados en /blog.",
+        link: "/admin/blog",
+        actionLabel: "Escribir artículo",
+      });
+    }
   }
 
   return gaps;

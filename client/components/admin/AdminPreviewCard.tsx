@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from "lucide-react";
+import { EyeOff, Pencil, Trash2 } from "lucide-react";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { assetUrl } from "@/lib/api";
 import { pillarIcon } from "@/lib/pillarIcons";
@@ -15,6 +15,9 @@ type AdminPreviewCardProps = {
   onEdit: () => void;
   onDelete: () => void;
   deleteLabel?: string;
+  /** Soft-hide (e.g. archive published content). */
+  onHide?: () => void;
+  hideLabel?: string;
 };
 
 export function AdminPreviewCard({
@@ -29,6 +32,8 @@ export function AdminPreviewCard({
   onEdit,
   onDelete,
   deleteLabel = "Eliminar",
+  onHide,
+  hideLabel = "Ocultar",
 }: AdminPreviewCardProps) {
   const src = assetUrl(imageUrl) || null;
   const Icon = iconName ? pillarIcon(iconName) : null;
@@ -36,7 +41,9 @@ export function AdminPreviewCard({
 
   const badgeRow =
     badges.length > 0 ? (
-      <div className={`flex flex-wrap gap-1.5 ${hasMedia ? "absolute top-2 left-2" : "mb-3"}`}>
+      <div
+        className={`flex flex-wrap gap-1.5 ${hasMedia ? "absolute top-2 left-2" : "mb-3"}`}
+      >
         {badges.map((b) => (
           <span
             key={b.label}
@@ -101,19 +108,29 @@ export function AdminPreviewCard({
           </ul>
         )}
 
-        <div className="flex gap-2 mt-4 pt-3 border-t border-cu-stone/15">
+        <div className="flex flex-wrap gap-2 mt-4 pt-3 border-t border-cu-stone/15">
           <button
             type="button"
             onClick={onEdit}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-montserrat font-semibold text-cu-black bg-cu-warm-white hover:bg-cu-stone/15 rounded-sm transition-colors"
+            className="flex-1 min-w-[5.5rem] flex items-center justify-center gap-1.5 py-2 text-xs font-montserrat font-semibold text-cu-black bg-cu-warm-white hover:bg-cu-stone/15 rounded-sm transition-colors"
           >
             <Pencil size={14} />
             Editar
           </button>
+          {onHide && (
+            <button
+              type="button"
+              onClick={onHide}
+              className="flex-1 min-w-[5.5rem] flex items-center justify-center gap-1.5 py-2 text-xs font-montserrat font-semibold text-cu-black border border-cu-stone/30 hover:bg-cu-warm-white rounded-sm transition-colors"
+            >
+              <EyeOff size={14} />
+              {hideLabel}
+            </button>
+          )}
           <button
             type="button"
             onClick={onDelete}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-montserrat font-semibold text-red-600 hover:bg-red-50 rounded-sm transition-colors"
+            className="flex-1 min-w-[5.5rem] flex items-center justify-center gap-1.5 py-2 text-xs font-montserrat font-semibold text-red-600 hover:bg-red-50 rounded-sm transition-colors"
           >
             <Trash2 size={14} />
             {deleteLabel}
