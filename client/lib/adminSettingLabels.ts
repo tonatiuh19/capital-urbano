@@ -68,6 +68,7 @@ const SETTING_LABELS: Record<string, SettingMeta> = {
   coming_soon_subtitle: { label: "Subtítulo — Próximamente", multiline: true },
   instagram_url: { label: "URL de Instagram", hint: "Enlace completo https://…" },
   linkedin_url: { label: "URL de LinkedIn", hint: "Enlace completo https://…" },
+  facebook_url: { label: "URL de Facebook", hint: "Enlace completo https://…" },
   map_lat: { label: "Mapa: latitud (centro)", hint: "Solo administradores." },
   map_lng: { label: "Mapa: longitud (centro)", hint: "Solo administradores." },
   under_construction: { label: "Sitio en construcción" },
@@ -96,6 +97,7 @@ export const SETTING_GROUPS: { title: string; keys: string[] }[] = [
       "whatsapp_number",
       "instagram_url",
       "linkedin_url",
+      "facebook_url",
     ],
   },
   {

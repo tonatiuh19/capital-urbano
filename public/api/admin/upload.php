@@ -1,7 +1,8 @@
 <?php
 /**
  * POST /api/admin/upload.php
- * Authenticated multipart upload. Fields: file (required), folder (developments|team|brochures).
+ * Authenticated multipart upload. Fields: file (required), folder (developments|team|brochures|blog).
+ * Images (JPG/PNG/WebP) for developments|team|blog; PDF only for brochures.
  * Returns { "url": "/uploads/{folder}/..." } — same pattern as liv-capital amenity-upload.
  */
 require_once __DIR__ . '/_init.php';

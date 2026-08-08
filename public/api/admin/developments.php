@@ -26,6 +26,23 @@ if ($method === 'GET') {
         );
         $media->execute([$id]);
         $dev['media'] = $media->fetchAll();
+        $amenities = $pdo->prepare(
+            'SELECT id, development_id, name, description, icon, image_url, display_order, is_active
+             FROM development_amenities
+             WHERE development_id = ?
+             ORDER BY display_order ASC, id ASC'
+        );
+        $amenities->execute([$id]);
+        $dev['amenities'] = $amenities->fetchAll();
+        $models = $pdo->prepare(
+            'SELECT id, development_id, name, bedrooms, bathrooms, area_sqm, terrace_m2,
+                    image_url, display_order, is_active
+             FROM development_models
+             WHERE development_id = ?
+             ORDER BY display_order ASC, id ASC'
+        );
+        $models->execute([$id]);
+        $dev['models'] = $models->fetchAll();
         if (!empty($dev['highlights'])) {
             $dev['highlights'] = json_decode($dev['highlights'], true);
         }

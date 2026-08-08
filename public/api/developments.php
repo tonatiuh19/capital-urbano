@@ -34,6 +34,33 @@ if ($slug !== '') {
         );
         $media->execute([$row['id']]);
         $row['media'] = $media->fetchAll();
+        $amenities = $pdo->prepare(
+            'SELECT id, name, description, icon, image_url, display_order
+             FROM development_amenities
+             WHERE development_id = ? AND is_active = 1
+             ORDER BY display_order ASC, id ASC'
+        );
+        $amenities->execute([$row['id']]);
+        $row['amenities'] = $amenities->fetchAll();
+        $models = $pdo->prepare(
+            'SELECT id, name, bedrooms, bathrooms, area_sqm, terrace_m2, image_url, display_order
+             FROM development_models
+             WHERE development_id = ? AND is_active = 1
+             ORDER BY display_order ASC, id ASC'
+        );
+        $models->execute([$row['id']]);
+        $row['models'] = $models->fetchAll();
+        foreach ($row['models'] as &$model) {
+            if (isset($model['bedrooms']) && $model['bedrooms'] !== null) {
+                $model['bedrooms'] = (int) $model['bedrooms'];
+            }
+            foreach (['bathrooms', 'area_sqm', 'terrace_m2'] as $nk) {
+                if (isset($model[$nk]) && $model[$nk] !== null) {
+                    $model[$nk] = (float) $model[$nk];
+                }
+            }
+        }
+        unset($model);
     }
     json_respond(['development' => $row ?: null]);
 }

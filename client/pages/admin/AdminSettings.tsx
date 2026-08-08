@@ -23,7 +23,9 @@ export default function AdminSettings() {
       .get("/api/admin/settings.php")
       .then((res) => {
         const rows = ((res.data.settings ?? []) as Setting[]).filter(
-          (s) => s.setting_key !== FEATURE_BLOG_SETTING_KEY,
+          (s) =>
+            s.setting_key !== FEATURE_BLOG_SETTING_KEY &&
+            s.setting_key !== "under_construction",
         );
         setSettings(rows);
       })
@@ -59,7 +61,6 @@ export default function AdminSettings() {
       .finally(() => setSaving(false));
   };
 
-  const gate = settings.find((s) => s.setting_key === "under_construction");
   const groups = groupSettings(settings);
   const statKeySet = useMemo(() => new Set(PUBLIC_STAT_KEYS.map((s) => s.key)), []);
 
@@ -88,7 +89,7 @@ export default function AdminSettings() {
           Configuración del sitio
         </h1>
         <p className="text-sm text-cu-concrete mt-1">
-          Textos públicos, contacto, estadísticas y modo próximamente.
+          Textos públicos, contacto y estadísticas del sitio.
         </p>
       </div>
 
@@ -103,27 +104,6 @@ export default function AdminSettings() {
           {msg.text}
         </p>
       )}
-
-      <div className="bg-cu-warm-white border border-cu-orange/40 p-6 rounded-sm">
-        <h2 className="font-montserrat font-semibold text-cu-black mb-2">
-          Modo próximamente
-        </h2>
-        <p className="text-sm text-cu-concrete mb-4">
-          Si está activo, el público ve la página «Próximamente». El panel admin y el bypass
-          siguen funcionando.
-        </p>
-        <label className="flex items-center gap-3 text-sm font-montserrat font-medium cursor-pointer">
-          <input
-            type="checkbox"
-            checked={gate?.setting_value === "1"}
-            onChange={(e) =>
-              updateSetting("under_construction", e.target.checked ? "1" : "0")
-            }
-            className="accent-cu-orange"
-          />
-          Sitio en construcción
-        </label>
-      </div>
 
       {statValidationErrors.length > 0 && (
         <div className="bg-amber-50 border border-amber-200 rounded-sm px-4 py-3 text-sm text-amber-900">

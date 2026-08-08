@@ -4,7 +4,7 @@
  */
 
 function admin_upload_allowed_folders(): array {
-    return ['developments', 'team', 'brochures', 'blog'];
+    return ['developments', 'team', 'brochures', 'blog', 'amenities', 'gallery', 'models'];
 }
 
 function admin_handle_image_upload(string $folder): void {
@@ -31,15 +31,26 @@ function admin_handle_image_upload(string $folder): void {
         json_respond(['error' => $errMap[$file['error']] ?? 'Error al subir'], 400);
     }
 
-    if ($file['size'] > 5 * 1024 * 1024) {
-        json_respond(['error' => 'El archivo no puede superar 5 MB'], 400);
+    $isBrochure = $folder === 'brochures';
+    $maxBytes = $isBrochure ? 10 * 1024 * 1024 : 5 * 1024 * 1024;
+    if ($file['size'] > $maxBytes) {
+        $limitLabel = $isBrochure ? '10 MB' : '5 MB';
+        json_respond(['error' => "El archivo no puede superar $limitLabel"], 400);
     }
 
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime  = $finfo->file($file['tmp_name']);
-    $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
-    if (!array_key_exists($mime, $allowed)) {
-        json_respond(['error' => 'Solo se permiten imágenes JPG, PNG o WebP'], 400);
+
+    if ($isBrochure) {
+        $allowed = ['application/pdf' => 'pdf'];
+        if (!array_key_exists($mime, $allowed)) {
+            json_respond(['error' => 'Solo se permiten archivos PDF para el dossier'], 400);
+        }
+    } else {
+        $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp'];
+        if (!array_key_exists($mime, $allowed)) {
+            json_respond(['error' => 'Solo se permiten imágenes JPG, PNG o WebP'], 400);
+        }
     }
     $ext = $allowed[$mime];
 

@@ -2,6 +2,10 @@ import { useState } from "react";
 import type { Development } from "@shared/api";
 import { slugify } from "@/lib/slugify";
 import { AdminImageField } from "@/components/admin/AdminImageField";
+import { AdminFileField } from "@/components/admin/AdminFileField";
+import { AdminDevelopmentAmenities } from "@/components/admin/AdminDevelopmentAmenities";
+import { AdminDevelopmentGallery } from "@/components/admin/AdminDevelopmentGallery";
+import { AdminDevelopmentModels } from "@/components/admin/AdminDevelopmentModels";
 import { ADMIN_FIELD_LIMITS } from "@/lib/adminFieldLimits";
 import {
   AdminFormField,
@@ -286,6 +290,16 @@ export function AdminDevelopmentForm({
           onUploadingChange={onUploadingChange}
         />
 
+        <AdminFileField
+          id="dev-brochure"
+          label="Dossier / brochure (PDF)"
+          hint="Aparece como «Descargar dossier» en la ficha del proyecto. Puedes reemplazarlo cuando actualices el documento."
+          folder="brochures"
+          value={form.brochure_url ?? ""}
+          onChange={(url) => update({ brochure_url: url || null })}
+          onUploadingChange={onUploadingChange}
+        />
+
         <AdminFormField id="dev-external" label="Sitio web del proyecto (opcional)">
           <input
             id="dev-external"
@@ -319,8 +333,8 @@ export function AdminDevelopmentForm({
       </AdminFormSection>
 
       <AdminFormSection
-        title="Amenidades y destacados"
-        description='Lista en formato JSON. Ejemplo: ["Roof garden", "Gimnasio"]'
+        title="Destacados (texto)"
+        description='Lista corta en JSON para chips del resumen. Ejemplo: ["Roof garden", "Gimnasio"]. Las amenidades con foto se gestionan abajo.'
       >
         <AdminFormField id="dev-highlights" label="Destacados (JSON)">
           <textarea
@@ -338,6 +352,32 @@ export function AdminDevelopmentForm({
           )}
         </AdminFormField>
       </AdminFormSection>
+
+      {form.id != null && form.id > 0 ? (
+        <>
+          <AdminDevelopmentAmenities
+            developmentId={form.id}
+            onUploadingChange={onUploadingChange}
+          />
+          <AdminDevelopmentGallery
+            developmentId={form.id}
+            onUploadingChange={onUploadingChange}
+          />
+          <AdminDevelopmentModels
+            developmentId={form.id}
+            onUploadingChange={onUploadingChange}
+          />
+        </>
+      ) : (
+        <AdminFormSection
+          title="Amenidades, galería y modelos"
+          description="Guarda el proyecto primero; después podrás agregar amenidades, imágenes y tipologías."
+        >
+          <p className="text-sm text-cu-concrete">
+            Se editan al abrir un proyecto existente.
+          </p>
+        </AdminFormSection>
+      )}
 
       <AdminFormSection title="Visibilidad en el sitio">
         <label className="flex items-center gap-2 text-sm font-montserrat">

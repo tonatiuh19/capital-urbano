@@ -1,9 +1,16 @@
 import adminAxios from "@/store/axiosAdmin";
 import { getAdminApiError } from "@/lib/adminApi";
 
-export type AdminUploadFolder = "developments" | "team" | "brochures" | "blog";
+export type AdminUploadFolder =
+  | "developments"
+  | "team"
+  | "brochures"
+  | "blog"
+  | "amenities"
+  | "gallery"
+  | "models";
 
-export async function uploadAdminImage(
+export async function uploadAdminFile(
   file: File,
   folder: AdminUploadFolder,
 ): Promise<string> {
@@ -21,6 +28,13 @@ export async function uploadAdminImage(
     }
     return data.url;
   } catch (err) {
-    throw new Error(getAdminApiError(err, "Error al subir la imagen"));
+    throw new Error(getAdminApiError(err, "Error al subir el archivo"));
   }
+}
+
+export async function uploadAdminImage(
+  file: File,
+  folder: AdminUploadFolder,
+): Promise<string> {
+  return uploadAdminFile(file, folder);
 }

@@ -6,6 +6,7 @@ import {
   Mail,
   Instagram,
   Linkedin,
+  Facebook,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setLocked, BYPASS_KEY } from "@/store/slices/siteConfigSlice";
@@ -37,6 +38,7 @@ export function Footer() {
   };
   const instagramUrl = (config?.instagram_url as string)?.trim();
   const linkedinUrl = (config?.linkedin_url as string)?.trim();
+  const facebookUrl = (config?.facebook_url as string)?.trim();
   const contactPhone = (config?.contact_phone as string)?.trim();
   const contactEmail = (config?.contact_email as string)?.trim();
   const contactAddress = (config?.contact_address as string)?.trim();
@@ -117,6 +119,17 @@ export function Footer() {
                   aria-label="LinkedIn"
                 >
                   <Linkedin size={20} />
+                </a>
+              )}
+              {facebookUrl && (
+                <a
+                  href={facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 hover:text-cu-orange transition-colors duration-300"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={20} />
                 </a>
               )}
             </div>

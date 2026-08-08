@@ -15,6 +15,11 @@ import { SkeletonProjectDetail } from "@/components/loading";
 import { useShowQuerySkeleton } from "@/hooks/useShowQuerySkeleton";
 import { ExpandableText } from "@/components/content/ExpandableText";
 import { ProjectLocationMap } from "@/components/projects/ProjectLocationMap";
+import { ProjectAmenitiesGrid } from "@/components/projects/ProjectAmenitiesGrid";
+import {
+  ProjectGalleryGrid,
+  ProjectModelsGrid,
+} from "@/components/projects/ProjectGalleryModels";
 import { SafeImage } from "@/components/ui/SafeImage";
 import { LivCapitalPanel } from "@/components/projects/LivCapitalPanel";
 import { useLivFeed } from "@/hooks/useLivFeed";
@@ -66,11 +71,15 @@ export default function ProjectDetail() {
   }
 
   const highlights = Array.isArray(d.highlights) ? d.highlights : [];
+  const amenities = Array.isArray(d.amenities) ? d.amenities : [];
+  const models = Array.isArray(d.models) ? d.models : [];
+  const media = Array.isArray(d.media) ? d.media : [];
   const canonicalPath = `/projects/${d.slug}`;
   const metaDescription = truncateMetaDescription(
     d.description_short ?? d.tagline ?? d.description,
   );
-  const hasGallery = !hasLiv && !!(d.media && d.media.length > 0);
+  const hasGallery = media.some((m) => m.media_type !== "video" && m.url);
+  const hasModels = models.length > 0;
   const hasLocation = d.latitude != null && d.longitude != null;
   const hasContact =
     d.contact_email || d.contact_phone || d.external_site_url || d.brochure_url;
@@ -155,6 +164,11 @@ export default function ProjectDetail() {
                   Galería
                 </TabsTrigger>
               )}
+              {hasModels && (
+                <TabsTrigger value="modelos" className={TAB_TRIGGER}>
+                  Modelos
+                </TabsTrigger>
+              )}
               {hasLocation && (
                 <TabsTrigger value="ubicacion" className={TAB_TRIGGER}>
                   Ubicación
@@ -167,11 +181,11 @@ export default function ProjectDetail() {
               )}
             </TabsList>
 
-            <TabsContent value="resumen" className="mt-8">
+            <TabsContent value="resumen" className="mt-8 space-y-10">
               {d.description && (
                 <ExpandableText
                   text={d.description}
-                  className="text-lg text-cu-concrete leading-relaxed mb-10"
+                  className="text-lg text-cu-concrete leading-relaxed"
                   clampClass="line-clamp-4"
                 />
               )}
@@ -187,6 +201,7 @@ export default function ProjectDetail() {
                   ))}
                 </ul>
               )}
+              <ProjectAmenitiesGrid amenities={amenities} />
             </TabsContent>
 
             {hasLiv && (
@@ -196,34 +211,41 @@ export default function ProjectDetail() {
                   loading={livQ.isPending}
                   error={livQ.isError}
                   externalUrl={d.external_site_url ?? "https://livcapitalgdl.mx"}
+                  hideAmenities={amenities.length > 0}
+                  hideGallery={hasGallery}
+                  hideModels={hasModels}
                 />
               </TabsContent>
             )}
 
             {hasGallery && (
-              <TabsContent value="galeria" className="mt-8">
-                <div className="grid grid-cols-2 gap-4">
-                  {d.media!.map((m) =>
-                    m.media_type === "video" ? (
-                      <div key={m.id} className="col-span-2 aspect-video">
-                        <iframe
-                          src={m.url}
-                          title={m.caption ?? "Video"}
-                          className="w-full h-full rounded-sm"
-                          allowFullScreen
-                        />
-                      </div>
-                    ) : (
-                      <SafeImage
-                        key={m.id}
-                        src={assetUrl(m.url) || null}
-                        alt={m.caption ?? m.url}
-                        className="w-full h-48 object-cover rounded-sm"
-                        fallbackClassName="w-full h-48 rounded-sm"
-                      />
-                    ),
-                  )}
-                </div>
+              <TabsContent value="galeria" className="mt-8 space-y-8">
+                <ProjectGalleryGrid media={media} />
+                {media.some((m) => m.media_type === "video") && (
+                  <div className="grid gap-4">
+                    {media
+                      .filter((m) => m.media_type === "video")
+                      .map((m) => (
+                        <div key={m.id} className="aspect-video">
+                          <iframe
+                            src={m.url}
+                            title={m.caption ?? "Video"}
+                            className="w-full h-full rounded-sm"
+                            allowFullScreen
+                          />
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </TabsContent>
+            )}
+
+            {hasModels && (
+              <TabsContent value="modelos" className="mt-8">
+                <ProjectModelsGrid
+                  models={models}
+                  externalUrl={d.external_site_url}
+                />
               </TabsContent>
             )}
 

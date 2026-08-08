@@ -57,6 +57,8 @@ erDiagram
 | `site_settings` | Key-value config (public flags for `/api/site-config`) |
 | `developments` | Portfolio projects (Punto Sao Paulo, Vista Magna, Torres Myth, …) |
 | `development_media` | Gallery / video per development |
+| `development_amenities` | Per-project amenities with optional image (admin-managed; independent of LIV feed) |
+| `development_models` | Per-project apartment tipologías with image (admin-managed) |
 | `quality_pillars` | Homepage “pilares de calidad” blocks |
 | `team_members` | Leadership & team (e.g. Gilberto Cordero) |
 | `cms_pages` | Markdown pages: `about`, `quality`, `experience`, legal |
@@ -115,7 +117,7 @@ Extended columns (migration `2026_002`):
 | liv-capital | capital-urbano |
 |-------------|----------------|
 | `apartment_models`, `model_images` | `developments`, `development_media` |
-| `amenities`, `points_of_interest` | N/A (building-level; lives on LIV site) |
+| `amenities`, `points_of_interest` | `development_amenities` (corporate portfolio); POIs stay on LIV |
 | `visit_bookings`, `visit_slot_*` | N/A (corporate site; visits per product site) |
 | `building_config` | `site_settings` |
 | `clients` CRM | **Implemented** — shared pattern with liv-capital |

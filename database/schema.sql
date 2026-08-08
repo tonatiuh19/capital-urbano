@@ -347,7 +347,7 @@ CREATE TABLE `developments` (
 --
 
 INSERT INTO `developments` (`id`, `slug`, `name`, `tagline`, `description_short`, `description`, `location_label`, `address_line`, `city`, `state`, `latitude`, `longitude`, `units_label`, `total_floors`, `total_units`, `status`, `delivery_estimate`, `hero_image_url`, `brochure_url`, `external_site_url`, `liv_project_slug`, `contact_email`, `contact_phone`, `is_featured`, `is_active`, `display_order`, `created_at`, `updated_at`, `highlights`) VALUES
-(1, 'liv-capital', 'LIV Capital', 'Vivienda Vertical de Lujo', NULL, 'LIV CAPITAL es un desarrollo residencial contemporáneo que reimagina la vivienda urbana de clase mundial. Ubicado en el corazón de Guadalajara, el proyecto combina arquitectura sofisticada con espacios optimizados y amenidades de lujo.', 'Guadalajara Centro', 'C. Pedro Loza 869', 'Guadalajara', 'Jalisco', 20.6900800, -103.3489000, '55 departamentos', 32, 55, 'construction', 'Segundo semestre 2027', '/uploads/developments/ca2ef3d26b676373b07ce8c15b38d3dc.jpg', '/uploads/brochures/punto-sao-paulo.pdf', 'https://livcapitalgdl.mx/', NULL, 'info@livcapitalgdl.mx', '+523312345678', 1, 1, 1, '2026-06-02 21:45:25', '2026-07-05 15:39:23', '[\"Roof garden\",\"Pet Park\",\"Sala Lounge\",\"Gym\"]'),
+(1, 'liv-capital', 'LIV Capital', 'Vivienda Vertical de Lujo', NULL, 'LIV CAPITAL es un desarrollo residencial contemporáneo que reimagina la vivienda urbana de clase mundial. Ubicado en el corazón de Guadalajara, el proyecto combina arquitectura sofisticada con espacios optimizados y amenidades de lujo.', 'Guadalajara Centro', 'Padre Kino 1030', 'Guadalajara', 'Jalisco', 20.6902718, -103.3432575, '55 departamentos', 32, 55, 'construction', 'Segundo semestre 2027', '/uploads/developments/ca2ef3d26b676373b07ce8c15b38d3dc.jpg', '/uploads/brochures/punto-sao-paulo.pdf', 'https://livcapitalgdl.mx/', NULL, 'contacto@livcapitalgdl.mx', '33 2560 1815', 1, 1, 1, '2026-06-02 21:45:25', '2026-07-05 15:39:23', '[\"Roof garden\",\"Pet Park\",\"Sala Lounge\",\"Gym\"]'),
 (4, 'punto-sao-paulo', 'Punto Sao Paulo', NULL, NULL, NULL, 'Guadalajara Centro', NULL, 'Guadalajara', 'Jalisco', NULL, NULL, '220 departamentos', NULL, NULL, 'construction', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, '2026-07-30 21:18:25', '2026-07-30 21:18:25', NULL),
 (5, 'vista-magna', 'Vista Magna', NULL, NULL, NULL, 'Providencia', NULL, 'Guadalajara', 'Jalisco', NULL, NULL, '180 departamentos', NULL, NULL, 'construction', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, '2026-07-30 21:18:25', '2026-07-30 21:18:25', NULL),
 (6, 'torres-myth', 'Torres Myth', NULL, NULL, NULL, 'Country', NULL, 'Guadalajara', 'Jalisco', NULL, NULL, '320 departamentos', NULL, NULL, 'planning', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 3, '2026-07-30 21:18:25', '2026-07-30 21:18:25', NULL);
@@ -549,7 +549,7 @@ CREATE TABLE `site_settings` (
 INSERT INTO `site_settings` (`id`, `setting_key`, `setting_value`, `is_public`, `updated_at`) VALUES
 (1, 'site_name', 'Capital Urbano', 1, '2026-06-02 21:45:25'),
 (2, 'site_tagline', 'Desarrollos verticales de excelencia en Guadalajara', 1, '2026-06-02 21:45:25'),
-(3, 'contact_email', 'contacto@capitalurbano.com', 1, '2026-06-02 21:45:25'),
+(3, 'contact_email', 'contacto@capitalurbanogdl.com', 1, '2026-06-02 21:45:25'),
 (4, 'contact_phone', '+52 33 0000 0000', 1, '2026-06-02 21:45:25'),
 (5, 'contact_address', 'Francisco J. Mujica 604, Jardines Alcalda, Guadalajara, Jalisco. C.P. 44298', 1, '2026-07-09 16:42:24'),
 (6, 'contact_hours', 'Lunes a viernes · 9:00 – 18:00 hrs', 1, '2026-06-02 22:57:12'),
@@ -565,11 +565,12 @@ INSERT INTO `site_settings` (`id`, `setting_key`, `setting_value`, `is_public`, 
 (17, 'under_construction', '0', 1, '2026-06-04 14:25:19'),
 (18, 'coming_soon_title', 'Capital Urbano', 1, '2026-06-03 17:32:19'),
 (19, 'coming_soon_subtitle', 'Construimos Valor Que Permanece', 1, '2026-07-09 16:42:24'),
-(20, 'instagram_url', 'https://www.instagram.com/capitalurbanomx', 1, '2026-07-04 18:11:38'),
+(20, 'instagram_url', 'https://www.instagram.com/capital.urbano.gdl/', 1, '2026-07-04 18:11:38'),
 (21, 'about_hero_subtitle', 'Desarrollamos vivienda conectada a la ciudad', 1, '2026-07-09 16:42:24'),
 (22, 'quality_hero_subtitle', 'Estándares internacionales en cada metro construido', 1, '2026-06-02 22:57:12'),
 (23, 'experience_hero_subtitle', 'Un proceso claro, humano y transparente de principio a fin', 1, '2026-06-02 22:57:12'),
-(68, 'linkedin_url', 'https://www.linkedin.com/company/capital-urbano', 1, '2026-07-04 18:11:38'),
+(68, 'linkedin_url', 'https://www.linkedin.com/company/capital-urbano-gdl-dptos', 1, '2026-07-04 18:11:38'),
+(78, 'facebook_url', 'https://www.facebook.com/profile.php?id=61592216379502', 1, '2026-07-04 18:11:38'),
 (69, 'experience_owners_integration', 'Integramos a los propietarios desde el día 1 del inicio de operación del edificio, en comisiones de inspección y vigilancia para que se vigile el correcto gasto de los recursos.', 1, '2026-07-09 16:42:24'),
 (71, 'about_leadership_title', 'Dirección', 1, '2026-07-30 21:30:44'),
 (72, 'about_leadership_subtitle', 'Gilberto Cordero Estrada — socio fundador y CEO. Ingeniero civil (UdG), maestría en valuación inmobiliaria (UNIVA) y 27 años en desarrollo vertical en Guadalajara.', 1, '2026-07-30 21:30:44'),

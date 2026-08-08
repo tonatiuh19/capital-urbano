@@ -27,6 +27,32 @@ export interface Development {
   is_active?: number;
   display_order?: number;
   media?: DevelopmentMedia[];
+  amenities?: DevelopmentAmenity[];
+  models?: DevelopmentModel[];
+}
+
+export interface DevelopmentAmenity {
+  id: number;
+  development_id?: number;
+  name: string;
+  description?: string | null;
+  icon?: string | null;
+  image_url?: string | null;
+  display_order: number;
+  is_active?: number;
+}
+
+export interface DevelopmentModel {
+  id: number;
+  development_id?: number;
+  name: string;
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  area_sqm?: number | null;
+  terrace_m2?: number | null;
+  image_url?: string | null;
+  display_order: number;
+  is_active?: number;
 }
 
 export interface DevelopmentMedia {

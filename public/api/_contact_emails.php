@@ -28,14 +28,14 @@ function contact_interest_label(string $interest): string
 }
 
 /**
- * Always notify contacto@capitalurbano.com, plus site_settings.contact_email
+ * Always notify contacto@capitalurbanogdl.com, plus site_settings.contact_email
  * and optional CONTACT_NOTIFY_EMAIL when different.
  *
  * @return list<string>
  */
 function contact_admin_recipients(?PDO $pdo): array
 {
-    $recipients = ['contacto@capitalurbano.com'];
+    $recipients = ['contacto@capitalurbanogdl.com'];
 
     if (defined('CONTACT_NOTIFY_EMAIL') && CONTACT_NOTIFY_EMAIL !== '') {
         $recipients[] = (string) CONTACT_NOTIFY_EMAIL;
